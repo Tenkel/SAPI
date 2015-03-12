@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/btCriarModelo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Criar Modelo" />
+
+    <Button
+        android:id="@+id/btBaixarModelo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Baixar Modelo" />
+    
+    <Button
+        android:id="@+id/btDestruirModelo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Apagar Modelo" />
+    
+    <Button
+        android:id="@+id/btEnviarModelo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enviar Modelo" />
+    
+    <Button
+        android:id="@+id/btExecutar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Executar" />
+    
+</LinearLayout>

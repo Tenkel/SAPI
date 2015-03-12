@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">AIPS</string>
+    <string name="title_section0">Registrar Dispositivo</string>
+    <string name="title_section1">Painel de Controle</string>
+    <string name="title_section2">Interface de Debug</string>
+    <string name="title_section3">Locais</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="action_settings">Settings</string>
+    <string name="debug_create_room">Criar</string>
+    <string name="debug_controle_captura_iniciar">Iniciar</string>
+    <string name="debug_controle_captura_interromper">Interromper</string>
+    <string name="dialogfragment_novoandar_nome">Nome</string>
+    <string name="dialogfragment_novoandar_referencia">Referência</string>
+    <string name="dialogfragment_novoandar_largura">Largura</string>
+    <string name="dialogfragment_novoandar_altura">Altura</string>
+    <string name="activity_debug_treinar">Treinar</string>
+    <string name="activity_debug_coleta">Iniciar coleta</string>
+    <string name="activity_debug_referencia">Referência</string>
+    <string name="debug_monitoramento_comecar">Começar</string>
+    <string name="debug_monitoramento_parar">Parar</string>
+    <string name="executemodel_trackposition">Rastrear posição</string>
+
+</resources>

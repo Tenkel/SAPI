@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Spinner
+        android:id="@+id/spAndares"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <br.ufrj.cos.labia.aips.customviews.SimpleAndarView
+        android:id="@+id/andar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btCollect"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Coletar" />
+
+        <Button
+            android:id="@+id/btRemoveSamples"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Remover Amostras" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btTrain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Treinar Modelo" />
+
+</LinearLayout>
