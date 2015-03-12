@@ -15,13 +15,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
-import br.ufrj.cos.labia.aips.comm.BasicConnector;
-import br.ufrj.cos.labia.aips.comm.CommunicationException;
 import br.ufrj.cos.labia.aips.dto.ModeloDTO;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog.Listener;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog.Worker;
-import com.tenkel.sapi.R;
+
 import com.tenkel.sapi.dal.Local;
 import com.tenkel.sapi.dal.LocalManager;
 import com.tenkel.sapi.dal.ModeloLocalizacao;
@@ -75,7 +73,7 @@ public class LocalActivity extends Activity implements Listener {
 				dialog.setWorker(new Worker() {
 						@Override
 						public void doHeavyWork(LoadingDialog dialog) {
-							baixarModelo();
+						//	baixarModelo(); MODELO NÂO SE BAIXA
 						}
 					});
 				dialog.show(getFragmentManager(), "baixar");
@@ -102,7 +100,7 @@ public class LocalActivity extends Activity implements Listener {
 				dialog.setWorker(new Worker() {
 						@Override
 						public void doHeavyWork(LoadingDialog dialog) {
-							enviarModelo();
+						//	enviarModelo(); MODELO NÂO SE ENVIA
 						}
 					});
 				dialog.show(getFragmentManager(), "enviar");
@@ -141,77 +139,79 @@ public class LocalActivity extends Activity implements Listener {
 		checkModelPresence();
 	}
 
-	private void enviarModelo() {
-		ModeloLocalizacao ml = mMLManager.getFirstByIdLocal(mIdLocal);
-		
-		if (ml == null)
-			throw new IllegalStateException("Não há um modelo de localização para este local");
-		
-		File models = getApplicationContext().getDir("models", Context.MODE_PRIVATE);
-		File zipFile = new File(models, ml.getFilename());
-		
-		BasicConnector.enviarModelo(mIdDispositivo, mLocal.getIdRemoto(), 
-				ml.getNomeVersao(), zipFile);
-		Log.i("LocalActivity", "Arquivo enviado");
-	}
+//	private void enviarModelo() {
+//		ModeloLocalizacao ml = mMLManager.getFirstByIdLocal(mIdLocal);
+//		
+//		if (ml == null)
+//			throw new IllegalStateException("Não há um modelo de localização para este local");
+//		
+//		File models = getApplicationContext().getDir("models", Context.MODE_PRIVATE);
+//		File zipFile = new File(models, ml.getFilename());
+//		
+//		BasicConnector.enviarModelo(mIdDispositivo, mLocal.getIdRemoto(), 
+//				ml.getNomeVersao(), zipFile);
+//		Log.e("LocalActivity", "Não se envia modelo!");
+//	}
 	
-	private void baixarModelo() {
+//	private void baixarModelo() {
+//		
+//		// Baixa a lista e escolher o versionName que for mais recente e compátivel
+//		String versionName = null;
+//		
+//		List<ModeloDTO> lista = BasicConnector.requisitarModelos(mIdDispositivo, mLocal.getIdRemoto());
+//		for (ModeloDTO dto : lista) {
+//			// if (WHIPS.canLoad(dto.versaoModelo)) {
+//			if (KDE.canLoad(dto.versaoModelo)) {
+//				versionName = dto.versaoModelo;
+//				break;
+//			}
+//		}
+//		
+//		if (versionName == null) {
+//			if (lista.isEmpty()) {
+//				String msg = "Nenhum modelo disponivel para este par (local, dispositivo)";
+//				Log.e("LocalActivity", msg);
+//				throw new CommunicationException(msg);
+//			} else {
+//				String msg = "Nenhum modelo compátivel para este par (local, dispositivo)";
+//				Log.e("LocalActivity", msg);
+//				throw new CommunicationException(msg);
+//			}
+//		}
+//		
+//		// Baixa o modelo escolhido e o salva a um ModeloLocalizacao
+//		String oldFilename = null;
+//		ModeloLocalizacao ml = mMLManager.getFirstByIdLocal(mIdLocal);
+//		if (ml == null) {
+//			ml = new ModeloLocalizacao();
+//		} else {
+//			oldFilename = ml.getFilename();
+//		}
+//		
+//		ml.setFilename(UUID.randomUUID().toString() + "-" + versionName);
+//		ml.setNomeVersao(versionName);
+//		ml.setIdLocal(mIdLocal);
+//		
+//		File models = getApplicationContext().getDir("models", Context.MODE_PRIVATE);
+//		File zipFile = new File(models, ml.getFilename());
+//		
+//		try {
+//			BasicConnector.baixarModelo(mIdDispositivo, mLocal.getIdRemoto(), 
+//					ml.getNomeVersao(), new FileOutputStream(zipFile));
+//			Log.i("LocalActivity", "Arquivo baixado");
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//			throw new CommunicationException("Falha ao salvar o modelo baixado");
+//		}
+//		
+//		if (oldFilename != null)
+//			new File(models, oldFilename).delete();
+//		
+//		if (ml.getId() == null) mMLManager.save(ml);
+//		else mMLManager.update(ml);
 		
-		// Baixa a lista e escolher o versionName que for mais recente e compátivel
-		String versionName = null;
 		
-		List<ModeloDTO> lista = BasicConnector.requisitarModelos(mIdDispositivo, mLocal.getIdRemoto());
-		for (ModeloDTO dto : lista) {
-			// if (WHIPS.canLoad(dto.versaoModelo)) {
-			if (KDE.canLoad(dto.versaoModelo)) {
-				versionName = dto.versaoModelo;
-				break;
-			}
-		}
-		
-		if (versionName == null) {
-			if (lista.isEmpty()) {
-				String msg = "Nenhum modelo disponivel para este par (local, dispositivo)";
-				Log.e("LocalActivity", msg);
-				throw new CommunicationException(msg);
-			} else {
-				String msg = "Nenhum modelo compátivel para este par (local, dispositivo)";
-				Log.e("LocalActivity", msg);
-				throw new CommunicationException(msg);
-			}
-		}
-		
-		// Baixa o modelo escolhido e o salva a um ModeloLocalizacao
-		String oldFilename = null;
-		ModeloLocalizacao ml = mMLManager.getFirstByIdLocal(mIdLocal);
-		if (ml == null) {
-			ml = new ModeloLocalizacao();
-		} else {
-			oldFilename = ml.getFilename();
-		}
-		
-		ml.setFilename(UUID.randomUUID().toString() + "-" + versionName);
-		ml.setNomeVersao(versionName);
-		ml.setIdLocal(mIdLocal);
-		
-		File models = getApplicationContext().getDir("models", Context.MODE_PRIVATE);
-		File zipFile = new File(models, ml.getFilename());
-		
-		try {
-			BasicConnector.baixarModelo(mIdDispositivo, mLocal.getIdRemoto(), 
-					ml.getNomeVersao(), new FileOutputStream(zipFile));
-			Log.i("LocalActivity", "Arquivo baixado");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			throw new CommunicationException("Falha ao salvar o modelo baixado");
-		}
-		
-		if (oldFilename != null)
-			new File(models, oldFilename).delete();
-		
-		if (ml.getId() == null) mMLManager.save(ml);
-		else mMLManager.update(ml);
-	}
+//	}
 	
 	@Override
 	protected void onResume() {

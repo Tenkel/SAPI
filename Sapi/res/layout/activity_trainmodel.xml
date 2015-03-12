@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.tenkel.sapi.customviews.SimpleAndarView
+    <br.ufrj.cos.labia.aips.SimpleAndarView
         android:id="@+id/andar"
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -25,7 +25,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import br.ufrj.cos.labia.aips.comm.BasicConnector;
 import br.ufrj.cos.labia.aips.customviews.AndarGridView;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog.Worker;

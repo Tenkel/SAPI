@@ -26,7 +26,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Spinner;
-import br.ufrj.cos.labia.aips.comm.BasicConnector;
 import br.ufrj.cos.labia.aips.customviews.SimpleAndarView;
 import br.ufrj.cos.labia.aips.customviews.SimpleAndarView.Point;
 import br.ufrj.cos.labia.aips.ips.IPS;
@@ -34,7 +33,7 @@ import br.ufrj.cos.labia.aips.ips.InvalidModelException;
 import br.ufrj.cos.labia.aips.ips.Location;
 import br.ufrj.cos.labia.aips.ips.Reading;
 import br.ufrj.cos.labia.aips.ips.WIFISignal;
-import com.tenkel.sapi.R;
+
 import com.tenkel.sapi.dal.Andar;
 import com.tenkel.sapi.dal.AndarManager;
 import com.tenkel.sapi.dal.Bridge;
