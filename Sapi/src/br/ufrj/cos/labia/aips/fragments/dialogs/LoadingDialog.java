@@ -1,6 +1,6 @@
 package br.ufrj.cos.labia.aips.fragments.dialogs;
 
-import br.ufrj.cos.labia.aips.R;
+import com.tenkel.sapi.R;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;

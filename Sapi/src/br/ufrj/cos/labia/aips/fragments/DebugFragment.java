@@ -26,18 +26,21 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-import br.ufrj.cos.labia.aips.DebugRoomActivity;
-import br.ufrj.cos.labia.aips.R;
-import br.ufrj.cos.labia.aips.dal.AccessPoint;
-import br.ufrj.cos.labia.aips.dal.AccessPointManager;
-import br.ufrj.cos.labia.aips.dal.Andar;
-import br.ufrj.cos.labia.aips.dal.AndarManager;
-import br.ufrj.cos.labia.aips.dal.LeituraWiFi;
-import br.ufrj.cos.labia.aips.dal.LeituraWifiManager;
-import br.ufrj.cos.labia.aips.dal.Observacao;
-import br.ufrj.cos.labia.aips.dal.ObservacaoManager;
-import br.ufrj.cos.labia.aips.dal.Posicao;
-import br.ufrj.cos.labia.aips.dal.PosicaoManager;
+
+import com.tenkel.sapi.DebugRoomActivity;
+import com.tenkel.sapi.R;
+import com.tenkel.sapi.dal.AccessPoint;
+import com.tenkel.sapi.dal.AccessPointManager;
+import com.tenkel.sapi.dal.Andar;
+import com.tenkel.sapi.dal.AndarManager;
+import com.tenkel.sapi.dal.LeituraWiFi;
+import com.tenkel.sapi.dal.LeituraWifiManager;
+import com.tenkel.sapi.dal.Observacao;
+import com.tenkel.sapi.dal.ObservacaoManager;
+import com.tenkel.sapi.dal.Posicao;
+import com.tenkel.sapi.dal.PosicaoManager;
+import com.tenkel.sapi.kde.KDE;
+
 import br.ufrj.cos.labia.aips.fragments.dialogs.AndaresSelectDialog;
 import br.ufrj.cos.labia.aips.fragments.dialogs.AndaresSelectDialog.OnAndaresSelectedListener;
 import br.ufrj.cos.labia.aips.fragments.dialogs.ConfirmDialog;
@@ -51,8 +54,6 @@ import br.ufrj.cos.labia.aips.ips.IPS;
 import br.ufrj.cos.labia.aips.ips.Location;
 import br.ufrj.cos.labia.aips.ips.Reading;
 import br.ufrj.cos.labia.aips.ips.WIFISignal;
-import br.ufrj.cos.labia.aips.ips.kde.KDE;
-import br.ufrj.cos.labia.aips.ips.whips.WHIPS;
 
 public class DebugFragment extends Fragment implements OnClickListener, OnItemClickListener, 
 		OnItemLongClickListener, NewRoomDialogListener, ConfirmDialogListener, OnAndaresSelectedListener, Listener {

@@ -3,14 +3,15 @@ package br.ufrj.cos.labia.aips.fragments.dialogs;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tenkel.sapi.dal.Andar;
+import com.tenkel.sapi.dal.AndarManager;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.Toast;
-import br.ufrj.cos.labia.aips.dal.Andar;
-import br.ufrj.cos.labia.aips.dal.AndarManager;
 
 public class AndaresSelectDialog extends DialogFragment {
 

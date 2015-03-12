@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="br.ufrj.cos.labia.aips"
+    package="com.tenkel.sapi"
     android:versionCode="2"
     android:versionName="0.1.1" >
 
@@ -24,7 +24,7 @@
         android:theme="@style/AppTheme" >
         
         <activity
-            android:name="br.ufrj.cos.labia.aips.MainActivity"
+            android:name="com.tenkel.sapi.MainActivity"
             android:label="@string/app_name"
         	android:screenOrientation="portrait" >
             
@@ -34,16 +34,16 @@
             </intent-filter>
         </activity>
         
-        <activity android:name="br.ufrj.cos.labia.aips.DebugRoomActivity"
+        <activity android:name="com.tenkel.sapi.DebugRoomActivity"
         	android:screenOrientation="portrait" />
-        <activity android:name="br.ufrj.cos.labia.aips.TrainModelActivity"
+        <activity android:name="com.tenkel.sapi.TrainModelActivity"
         	android:screenOrientation="portrait" />
-        <activity android:name="br.ufrj.cos.labia.aips.ExecuteModelActivity"
+        <activity android:name="com.tenkel.sapi.ExecuteModelActivity"
         	android:screenOrientation="portrait" />
-        <activity android:name="br.ufrj.cos.labia.aips.LocalActivity"
+        <activity android:name="com.tenkel.sapi.LocalActivity"
         	android:screenOrientation="portrait" />
         
-        <service android:name="br.ufrj.cos.labia.aips.dal.Bridge" />
+        <service android:name="com.tenkel.sapi.dal.Bridge" />
     </application>
 
 </manifest>

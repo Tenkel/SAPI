@@ -13,8 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import br.ufrj.cos.labia.aips.R;
-import br.ufrj.cos.labia.aips.dal.Andar;
+
+import com.tenkel.sapi.R;
+import com.tenkel.sapi.dal.Andar;
 
 public class NewRoomDialog extends DialogFragment implements OnClickListener {
 

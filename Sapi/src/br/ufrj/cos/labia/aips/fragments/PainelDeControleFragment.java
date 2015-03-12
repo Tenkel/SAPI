@@ -10,12 +10,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import br.ufrj.cos.labia.aips.R;
+
+import com.tenkel.sapi.R;
+import com.tenkel.sapi.dal.Bridge;
+import com.tenkel.sapi.dal.Dispositivo;
+import com.tenkel.sapi.dal.SharedPrefManager;
+
 import br.ufrj.cos.labia.aips.comm.BasicConnector;
 import br.ufrj.cos.labia.aips.comm.CommunicationException;
-import br.ufrj.cos.labia.aips.dal.Bridge;
-import br.ufrj.cos.labia.aips.dal.Dispositivo;
-import br.ufrj.cos.labia.aips.dal.SharedPrefManager;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog.Listener;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog.Worker;
