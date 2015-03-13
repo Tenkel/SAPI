@@ -1,5 +1,9 @@
 package com.tenkel.fragments;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
@@ -17,6 +21,10 @@ import android.widget.CompoundButton;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.ToggleButton;
+import br.ufrj.cos.labia.aips.ips.IPS;
+import br.ufrj.cos.labia.aips.ips.Location;
+import br.ufrj.cos.labia.aips.ips.Reading;
+import br.ufrj.cos.labia.aips.ips.WIFISignal;
 
 import com.tenkel.sapi.R;
 import com.tenkel.sapi.dal.AccessPointManager;
@@ -25,19 +33,35 @@ import com.tenkel.sapi.dal.Bridge;
 import com.tenkel.sapi.dal.LeituraWifiManager;
 import com.tenkel.sapi.dal.Observacao;
 import com.tenkel.sapi.dal.ObservacaoManager;
+import com.tenkel.sapi.dal.Posicao;
 import com.tenkel.sapi.dal.PosicaoManager;
 
 public class AutoScanFragment extends Fragment {
+
+	@Override
+	public void onPause() {
+		chrono.stop();
+		super.onPause();
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+	}
 
 	private AndarManager mAndarManager;
 	private PosicaoManager mPosicaoManager;
 	private ObservacaoManager mObservacaoManager;
 	private LeituraWifiManager mLeituraWIFIManager;
 	private AccessPointManager mAccessPointManager;
+	private TreeMap<Long, Posicao> mPosicoes;
 	
 	
 	private NumberPicker Room;
 	private ProgressBar LoopBar;
+	
+	private IPS mIPS;
 
 	// Dialogs
 	private Chronometer chrono;
@@ -107,20 +131,37 @@ public class AutoScanFragment extends Fragment {
 			for (int i=0; i<objects.length; ++i) 
 				results[i] = (ScanResult) objects[i];
 			
+			
 			predictPosition(results);
 			
-			if (mState <= 0) {
-				if (!mAndarView.isEnabled()) {
-					Observacao obs = mObservacaoManager.getById(idObservacao);
-					obs.setidPosicao(mPosicaoIds[mAndarView.getSelectedX()][mAndarView.getSelectedY()]);
-					mObservacaoManager.update(obs);
-					
-					mAndarView.addCollected(mAndarView.getSelectedX(), mAndarView.getSelectedY());
-				}
-			} else {
-				mState--;
-			}
+			Observacao obs = mObservacaoManager.getById(idObservacao);
+			obs.setidPosicao(mPosicaoIds[mAndarView.getSelectedX()][mAndarView.getSelectedY()]);
+			mObservacaoManager.update(obs);
+			
+			mAndarView.addCollected(mAndarView.getSelectedX(), mAndarView.getSelectedY());
 		}
+	}
+	
+	
+	private Long predictPosition(ScanResult[] results) {
+		if (mIPS == null) 
+			return null;
+		
+		List<WIFISignal> signals = new ArrayList<WIFISignal>();
+		for (ScanResult r : results) 
+			signals.add(new WIFISignal(r.BSSID, r.level));
+		
+		Reading reading = new Reading(signals);
+		Location l = mIPS.predict(reading);
+		
+		if (l == null || l.getPointId() == null)  {
+			Log.w("DebugRoomActivity", "IPS returned null as prediction");
+			return null;
+		}
+		
+		Posicao p = mPosicoes.get(l.getPointId());
+		return p.getId();
+
 	}
 
 }
