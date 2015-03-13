@@ -44,12 +44,16 @@ public class AutoScanFragment extends Fragment {
 	
     private ToggleButton Collect;
 
+	public static Fragment newInstance() {
+		return new AutoScanFragment();
+	}
+    
 	@Override
 	public void onAttach(Activity activity) {
 		// TODO Auto-generated method stub
 		super.onAttach(activity);
 	}
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
