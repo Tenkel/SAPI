@@ -23,5 +23,6 @@
     <string name="debug_monitoramento_comecar">Começar</string>
     <string name="debug_monitoramento_parar">Parar</string>
     <string name="executemodel_trackposition">Rastrear posição</string>
+    <string name="title_section4">Captura</string>
 
 </resources>

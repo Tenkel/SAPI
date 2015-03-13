@@ -119,9 +119,10 @@ public class NavigationDrawerFragment extends Fragment {
  //  	} else {
         	options = new String[]{
 	         //       getString(R.string.title_section0),
-	                getString(R.string.title_section1),
-	                getString(R.string.title_section2),
-	                getString(R.string.title_section3),
+	         //       getString(R.string.title_section1),
+	          //      getString(R.string.title_section2),
+	          //      getString(R.string.title_section3),
+        			getString(R.string.title_section4),
 	        };
 //        }
         
