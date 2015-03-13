@@ -8,9 +8,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import br.ufrj.cos.labia.aips.fragments.DebugFragment;
-import br.ufrj.cos.labia.aips.fragments.LocaisFragment;
-import br.ufrj.cos.labia.aips.fragments.PainelDeControleFragment;
-import br.ufrj.cos.labia.aips.fragments.RegistrarDispositivoFragment;
 import com.tenkel.sapi.R;
 
 public class MainActivity extends Activity
@@ -45,33 +42,12 @@ public class MainActivity extends Activity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         
-        if (position == 0) {
-        	FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, RegistrarDispositivoFragment.newInstance())
-                    .commit();
-        } 
-        
-        else if (position == 1) {
-        	FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, PainelDeControleFragment.newInstance())
-                    .commit();
-        } 
-        
-        else if (position == 2) {
+        if (position == 2) {
         	FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.container, DebugFragment.newInstance())
                     .commit();
         } 
-        
-        else if (position == 3) {
-        	FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, LocaisFragment.newInstance())
-                    .commit();
-        }
     }
 
     public void restoreActionBar() {

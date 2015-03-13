@@ -1,10 +1,6 @@
 package com.tenkel.sapi;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.util.List;
-import java.util.UUID;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,7 +11,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
-import br.ufrj.cos.labia.aips.dto.ModeloDTO;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog.Listener;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog.Worker;
@@ -25,7 +20,6 @@ import com.tenkel.sapi.dal.LocalManager;
 import com.tenkel.sapi.dal.ModeloLocalizacao;
 import com.tenkel.sapi.dal.ModeloLocalizacaoManager;
 import com.tenkel.sapi.dal.SharedPrefManager;
-import com.tenkel.sapi.kde.KDE;
 
 public class LocalActivity extends Activity implements Listener {
 	

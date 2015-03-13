@@ -381,7 +381,7 @@ public class ExecuteModelActivity extends Activity {
 								+ " date:" + date);
 						
 						try {
-							BasicConnector.registrarPosicao(mIdDispositivo, idPosicao, date);
+	//						BasicConnector.registrarPosicao(mIdDispositivo, idPosicao, date);
 							Log.i("Update Thread", "Position sent");
 							mLastUpdate = current;
 						} catch(Exception e) {
