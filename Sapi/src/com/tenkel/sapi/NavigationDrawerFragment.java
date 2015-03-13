@@ -112,18 +112,18 @@ public class NavigationDrawerFragment extends Fragment {
 
     public void updateAdapter() {
         String[] options;
-        if (new SharedPrefManager(getActivity(), false).getIdDispositivo() == -1) {
+ //       if (new SharedPrefManager(getActivity(), false).getIdDispositivo() == -1) {
+  //      	options = new String[]{
+//	                getString(R.string.title_section0),
+//	        };
+ //  	} else {
         	options = new String[]{
-	                getString(R.string.title_section0),
-	        };
-    	} else {
-        	options = new String[]{
-	                getString(R.string.title_section0),
+	         //       getString(R.string.title_section0),
 	                getString(R.string.title_section1),
 	                getString(R.string.title_section2),
 	                getString(R.string.title_section3),
 	        };
-        }
+//        }
         
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
