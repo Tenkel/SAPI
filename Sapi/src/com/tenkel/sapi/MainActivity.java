@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
-import br.ufrj.cos.labia.aips.fragments.DebugFragment;
 
 import com.tenkel.fragments.AutoScanFragment;
 import com.tenkel.sapi.R;
@@ -44,7 +43,7 @@ public class MainActivity extends Activity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         
-        if (position == 1) {
+        if (position == 0) {
         	FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.container, AutoScanFragment.newInstance())
