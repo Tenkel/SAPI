@@ -19,6 +19,12 @@
         android:textOn="Predict On" />
 
     <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aquisições" />
+
+    <TextView
         android:id="@+id/aqc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,11 +34,32 @@
         android:textColor="#0099FF" />
 
     <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Posição " />
+
+    <TextView
         android:id="@+id/chute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1"
         android:textColor="#FF0000"
         android:textSize="60sp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Confiança" />
+
+    <TextView
+        android:id="@+id/confianca"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp"
+        android:text="0"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#00ff00" />
 
 </LinearLayout>

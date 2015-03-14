@@ -59,6 +59,7 @@ public class Train extends Fragment {
 	private Map<Long, AccessPoint> mAccessPoints;
 	private TextView aquisicoes;
 	private TextView guess;
+	private TextView confianca;
 	private int cycles;
 	
 	public static Fragment newInstance() {
@@ -78,6 +79,7 @@ public class Train extends Fragment {
         
         aquisicoes = (TextView) view.findViewById(R.id.aqc);
         guess = (TextView) view.findViewById(R.id.chute);
+        confianca = (TextView) view.findViewById(R.id.confianca);
         Train = (Button) view.findViewById(R.id.buTrain);
         
         cycles = 0;
@@ -160,11 +162,17 @@ public class Train extends Fragment {
 			return;
 		}
 		
-		else guess.setText(String.valueOf(l.getPointId()));
+		else{ 
+			guess.setText(String.valueOf(l.getPointId()));
+			confianca.setText(String.valueOf(mIPS.getConfidence()));
+		}
 
 	}
 	
 	private void trainModel() {
+		if (mIPS != null) mIPS.close();
+		IPS ips = new KDE();
+		
 		for (Andar andar : mAndares){
 		List<Observacao> samples = mObservacaoManager.getByIdAndar(andar.getId());
 		
@@ -189,9 +197,6 @@ public class Train extends Fragment {
 			Toast.makeText(getActivity(), "No signals detected", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		
-		if (mIPS != null) mIPS.close();
-		IPS ips = new KDE();
 		
 		int i = 0;
 		for (Observacao s : samples) {
