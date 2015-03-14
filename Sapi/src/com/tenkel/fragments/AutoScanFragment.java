@@ -36,6 +36,8 @@ import com.tenkel.sapi.dal.AccessPointManager;
 import com.tenkel.sapi.dal.Andar;
 import com.tenkel.sapi.dal.AndarManager;
 import com.tenkel.sapi.dal.Bridge;
+import com.tenkel.sapi.dal.FuncaoPosicao;
+import com.tenkel.sapi.dal.FuncaoPosicaoManager;
 import com.tenkel.sapi.dal.LeituraWiFi;
 import com.tenkel.sapi.dal.LeituraWifiManager;
 import com.tenkel.sapi.dal.Observacao;
@@ -60,6 +62,7 @@ public class AutoScanFragment extends Fragment {
 	private AndarManager mAndarManager;
 	private PosicaoManager mPosicaoManager;
 	private ObservacaoManager mObservacaoManager;
+	private FuncaoPosicaoManager mFuncaoPosicaoManager;
 	private LeituraWifiManager mLeituraWIFIManager;
 	private AccessPointManager mAccessPointManager;
 	//private TreeMap<Long, Posicao> mPosicoes;
@@ -110,6 +113,7 @@ public class AutoScanFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_autoscan, container, false);
 
 		// Managers
+        mFuncaoPosicaoManager = new FuncaoPosicaoManager(getActivity());
 		mAndarManager = new AndarManager(getActivity());
 		mPosicaoManager = new PosicaoManager(getActivity());
 		mObservacaoManager = new ObservacaoManager(getActivity());
@@ -269,7 +273,7 @@ public class AutoScanFragment extends Fragment {
 	
 	private void FillActualData(){
 		maxpower.setText(String.valueOf(nmaxpower = mLeituraWIFIManager.getMaxValueByidPosicao(actual_posicao.getId())));
-		naps.setText(String.valueOf(nnaps = mAccessPointManager.getByObservacaoIdPosicao(actual_posicao.getId()).size()));
+		naps.setText(String.valueOf(nnaps = mAccessPointManager.getByFuncaoPosicaoIdPosicao(actual_posicao.getId()).size()));
 		aquisicoes.setText(String.valueOf(naquisicoes = mObservacaoManager.getByidPosicao(actual_posicao.getId()).size()));				
 	}
 	
@@ -299,17 +303,20 @@ public class AutoScanFragment extends Fragment {
 			Object[] objects = (Object[]) intent.getSerializableExtra("wifi");
 			int level;
 			
-			for (int i=0; i<objects.length; ++i) 
+			for (int i=0; i<objects.length; ++i)
 				if((level = ((ScanResult) objects[i]).level) > nmaxpower)
 					nmaxpower = level;
-				
 			
-			maxpower.setText(String.valueOf((int)nmaxpower));			
+			
+			maxpower.setText(String.valueOf((int)nmaxpower));
+			
+			for(AccessPoint ap :mAccessPointManager.getByIdObservacao(idObservacao))
+				mFuncaoPosicaoManager.save(new FuncaoPosicao(actual_posicao.getId(), ap.getId(), (long) 0, null));				
 			
 			Observacao obs = mObservacaoManager.getById(idObservacao);
 			obs.setidPosicao(actual_posicao.getId());
 			mObservacaoManager.update(obs);
-			naps.setText(String.valueOf(nnaps = mAccessPointManager.getByObservacaoIdPosicao(actual_posicao.getId()).size()));
+			naps.setText(String.valueOf(nnaps = mAccessPointManager.getByFuncaoPosicaoIdPosicao(actual_posicao.getId()).size()));
 		}
 	}
 	

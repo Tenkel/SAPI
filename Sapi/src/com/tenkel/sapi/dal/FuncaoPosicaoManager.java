@@ -9,11 +9,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
-public class FuncaoPosicaoTable extends DataManager {
+public class FuncaoPosicaoManager extends DataManager {
 	
 	SQLiteStatement maxvalue;
 
-	public FuncaoPosicaoTable(Context c) {
+	public FuncaoPosicaoManager(Context c) {
 		super(c);
 	}
 	

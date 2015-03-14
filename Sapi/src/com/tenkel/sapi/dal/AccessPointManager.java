@@ -58,6 +58,58 @@ public class AccessPointManager extends DataManager {
 		return list;
 	}
 
+	public List<AccessPoint> getByIdObservacao(long idObservacao) {
+		List<AccessPoint> list = new ArrayList<AccessPoint>();
+		SQLiteDatabase db = getReadableDatabase();
+
+		try {
+			Cursor c = db.rawQuery("SELECT ap." + AccessPoint.ID + ", ap." + AccessPoint.BSSID + ", ap." + AccessPoint.ESSID + ", ap." + AccessPoint.CONFIANCA + ", ap." + AccessPoint.IDPOSICAO 
+					+ " FROM " + AccessPointTable + " ap INNER JOIN " + LeituraWiFiTable + " lwifi ON lwifi.idAccessPoint=ap.id "
+					+ " WHERE lwifi.idObservacao=" + idObservacao, null);
+			
+			while (c.moveToNext()){
+				AccessPoint accesspoint = new AccessPoint();
+				accesspoint.setId(c.getLong(0));
+				accesspoint.setbssid(c.getString(1));
+				accesspoint.setessid(c.getString(2));
+				accesspoint.setconfianca(c.getFloat(3));
+				accesspoint.setidPosicao(c.getLong(4));
+				list.add(accesspoint);
+			}
+			c.close();
+		} finally {
+			db.close();
+		}
+		
+		return list;
+	}
+
+	public List<AccessPoint> getByFuncaoPosicaoIdPosicao(long idPosicao) {
+		List<AccessPoint> list = new ArrayList<AccessPoint>();
+		SQLiteDatabase db = getReadableDatabase();
+
+		try {
+			Cursor c = db.rawQuery("SELECT ap." + AccessPoint.ID + ", ap." + AccessPoint.BSSID + ", ap." + AccessPoint.ESSID + ", ap." + AccessPoint.CONFIANCA + ", ap." + AccessPoint.IDPOSICAO 
+					+ " FROM " + AccessPointTable + " ap INNER JOIN " + FuncaoPosicaoTable + " fp ON fp.idAccessPoint=ap.id "
+					+ " WHERE fp.idPosicao=" + idPosicao, null);
+			
+			while (c.moveToNext()){
+				AccessPoint accesspoint = new AccessPoint();
+				accesspoint.setId(c.getLong(0));
+				accesspoint.setbssid(c.getString(1));
+				accesspoint.setessid(c.getString(2));
+				accesspoint.setconfianca(c.getFloat(3));
+				accesspoint.setidPosicao(c.getLong(4));
+				list.add(accesspoint);
+			}
+			c.close();
+		} finally {
+			db.close();
+		}
+		
+		return list;
+	}
+
 	public List<AccessPoint> getByObservacaoIdPosicao(long idPosicao) {
 		List<AccessPoint> list = new ArrayList<AccessPoint>();
 		SQLiteDatabase db = getReadableDatabase();
