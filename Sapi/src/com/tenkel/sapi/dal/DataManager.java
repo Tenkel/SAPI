@@ -33,6 +33,8 @@ public class DataManager extends SQLiteOpenHelper {
 	
 	public static final String AndarTable = "Andar";
 
+	public static final String FuncaoPosicaoTable = "FuncaoPosicao";
+	
 	public static final String PosicaoTable = "Posicao";
 	
 	public static final String ObservacaoTable = "Observacao";
@@ -70,24 +72,6 @@ public class DataManager extends SQLiteOpenHelper {
 	public static class FuncaoTipo {
 		public static final String ID = "id";
 		public static final String TIPO = "tipo";
-	}
-
-	
-	public static final String FuncaoPosicaoTable = "FuncaoPosicao";
-
-	public static class FuncaoPosicao {
-		public static final String ID = "id";
-		public static final String IDPOSICAO = "idPosicao";
-		public static final String IDACCESSPOINT = "idAccessPoint";
-		public static final String TIPO = "tipo";
-		public static final String URI = "uri";
-		public static final String FK_FUNCAOPOSICAO_POSICAO = "fk_FuncaoPosicao_Posicao";
-		public static final String FK_FUNCAOPOSICAO_ACCESSPOINT = "fk_FuncaoPosicao_AccessPoint";
-		public static final String FK_POSFUNC_LOCAL_IDX = "fk_PosFunc_Local_idx";
-		public static final String FK_POSFUNC_ACCESSPOINT_IDX = "fk_PosFunc_AccessPoint_idx";
-		public static final String IDTIPO = "idTipo";
-		public static final String FK_FUNCAOPOSICAO_FUNCAOTIPO = "fk_FuncaoPosicao_FuncaoTipo";
-		public static final String UNIQUE_FUNCAOTIPO = "unique_FuncaoTipo";
 	}
 	
 	public static final String SalaTable = "Sala";
