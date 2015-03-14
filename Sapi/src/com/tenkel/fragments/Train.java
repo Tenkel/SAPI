@@ -174,37 +174,6 @@ public class Train extends Fragment {
 			
 		}
 		
-		/// ENDS HERE
-		
-		for (Andar andar : mAndares){
-		List<Observacao> samples = mObservacaoManager.getByIdAndar(andar.getId());
-		
-		List<WIFISignal> all = new ArrayList<WIFISignal>();
-		List<List<WIFISignal>> internal = new ArrayList<List<WIFISignal>>();
-		for (Observacao s : samples) {
-			List<LeituraWiFi> signals = mLeituraWIFIManager.getByidObservacao(s.getId());
-			List<WIFISignal> signals2 = new ArrayList<WIFISignal>();
-			
-			for (LeituraWiFi s2 : signals) {
-				AccessPoint ap = mAccessPoints.get(s2.getIdAccessPoint());
-				WIFISignal s3 = new WIFISignal(ap.getbssid(), s2.getValor());
-				signals2.add(s3);
-				all.add(s3);
-			}
-			
-			internal.add(signals2);
-		}
-		
-		if (all.size() == 0) {
-			Toast.makeText(getActivity(), "No signals detected", Toast.LENGTH_SHORT).show();
-			return;
-		}
-		
-		int i = 0;
-		for (Observacao s : samples) {
-			ips.learn(new Reading(internal.get(i++)), new Location(s.getIdPosicao()));
-			}
-		}
 		mIPS = ips;
 	}
 
