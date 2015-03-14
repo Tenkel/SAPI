@@ -59,6 +59,7 @@ public class Train extends Fragment {
 	private List<Andar> mAndares;
 	private WifiReceiver mReceiver;
 	private Map<Long, AccessPoint> mAccessPoints;
+	private AccessPointManager mAccessPointManager;
 	private TextView aquisicoes;
 	private TextView guess;
 	private TextView confianca;
@@ -93,6 +94,7 @@ public class Train extends Fragment {
      		mPosicaoManager = new PosicaoManager(getActivity());
      		mAccessPointManager = new AccessPointManager(getActivity());
      		
+     		mAndares = mAndarManager.getAllWithNullIdLocal();
      		// Ouvinte para os eventos do Bridge
      		mReceiver = new WifiReceiver();
         
@@ -166,7 +168,7 @@ public class Train extends Fragment {
 		
 		List<WIFISignal> all = new ArrayList<WIFISignal>();
 		List<List<WIFISignal>> internal = new ArrayList<List<WIFISignal>>();
-		
+		carregarAccessPoints();
 		for (Observacao s : samples) {
 			List<LeituraWiFi> signals = mLeituraWIFIManager.getByidObservacao(s.getId());
 			List<WIFISignal> signals2 = new ArrayList<WIFISignal>();
@@ -189,10 +191,9 @@ public class Train extends Fragment {
 		int i = 0;
 		for (Observacao s : samples) {
 			ips.learn(new Reading(internal.get(i++)), new Location(s.getIdPosicao()));
+			}
 		}
-		
 		mIPS = ips;
-		}
 	}
 
 	public class WifiReceiver extends BroadcastReceiver {
@@ -227,6 +228,10 @@ public class Train extends Fragment {
 		}
 	}
 
-	
+	private void carregarAccessPoints() {
+		mAccessPoints = new TreeMap<Long, AccessPoint>();
+		List<AccessPoint> aps = mAccessPointManager.getAll();
+		for (AccessPoint ap : aps) mAccessPoints.put(ap.getId(), ap);
+	}
 	
 }
