@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
@@ -80,6 +81,8 @@ public class AutoScanFragment extends Fragment {
 	private ImageButton addandar;
 	private ImageButton addposicao;
 	
+	private EditText andarnome;
+	
 	private TextView aquisicoes;
 	private int naquisicoes;
 	private TextView naps;
@@ -129,6 +132,7 @@ public class AutoScanFragment extends Fragment {
 		Collect = (ToggleButton) view.findViewById(R.id.captura);
 		addandar = (ImageButton) view.findViewById(R.id.addAndar);
 		addposicao = (ImageButton) view.findViewById(R.id.addPosicao);
+		andarnome = (EditText) view.findViewById(R.id.andarnome);
 		
 		receiver = new AutoWifiReceiver();
 		
@@ -192,6 +196,7 @@ public class AutoScanFragment extends Fragment {
 				actual_posicao = mPosicoes.get((nroom = mPosicoes.size())-1);
 				Room.setMaxValue(nroom);
 				Room.setValue(nroom);
+				andarnome.setText(actual_andar.getNome());
 				FillActualData();
 			}
 		});
@@ -268,6 +273,7 @@ public class AutoScanFragment extends Fragment {
 		});
 
 		FillActualData();
+		andarnome.setText(actual_andar.getNome());
 		
         return view;
 	}

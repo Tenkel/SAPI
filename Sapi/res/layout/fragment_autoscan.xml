@@ -124,8 +124,10 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
-            android:id="@+id/editText1"
+            android:id="@+id/andarnome"
             android:layout_gravity="end"
+            android:lines="1"
+            android:maxLines="1"
             android:ems="8" >
         </EditText>
 
