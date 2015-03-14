@@ -59,7 +59,6 @@ public class Train extends Fragment {
 	private List<Andar> mAndares;
 	private WifiReceiver mReceiver;
 	private Map<Long, AccessPoint> mAccessPoints;
-	private AccessPointManager mAccessPointManager;
 	private TextView aquisicoes;
 	private TextView guess;
 	private TextView confianca;
@@ -131,6 +130,8 @@ public class Train extends Fragment {
 		}
 		});
 
+
+		carregarAccessPoints();
         return view;
 	}
 	
@@ -163,12 +164,23 @@ public class Train extends Fragment {
 	private void trainModel() {
 		IPS ips = new KDE();
 		
+		for (Posicao posicao : mPosicaoManager.getAll()){
+			List<WIFISignal> wifi_readings = new ArrayList<WIFISignal>();
+			
+			for (LeituraWiFi wifisample : mLeituraWIFIManager.getByidPosicao(posicao.getId()))
+				wifi_readings.add(new WIFISignal(mAccessPoints.get(wifisample.getIdAccessPoint()).getbssid(),wifisample.getValor()));
+			
+			ips.learn(new Reading(wifi_readings), new Location(posicao.getId()));
+			
+		}
+		
+		/// ENDS HERE
+		
 		for (Andar andar : mAndares){
 		List<Observacao> samples = mObservacaoManager.getByIdAndar(andar.getId());
 		
 		List<WIFISignal> all = new ArrayList<WIFISignal>();
 		List<List<WIFISignal>> internal = new ArrayList<List<WIFISignal>>();
-		carregarAccessPoints();
 		for (Observacao s : samples) {
 			List<LeituraWiFi> signals = mLeituraWIFIManager.getByidObservacao(s.getId());
 			List<WIFISignal> signals2 = new ArrayList<WIFISignal>();
