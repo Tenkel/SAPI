@@ -70,7 +70,7 @@ public class LeituraWifiManager extends DataManager {
 		SQLiteDatabase db = getReadableDatabase();
 
 		try {
-			Cursor c = db.rawQuery("SELECT " + LeituraWiFi.STRFIELDS 
+			Cursor c = db.rawQuery("SELECT LeituraWiFi.id, idAccessPoint, idObservacao, valor" 
 					+ " FROM "+ LeituraWiFiTable + ", " + ObservacaoTable 
 					+ " WHERE " + LeituraWiFiTable + "." + LeituraWiFi.IDOBSERVACAO + " = " + ObservacaoTable + "." + Observacao.ID
 								+ " AND " 
