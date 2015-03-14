@@ -73,8 +73,8 @@ public class KDE implements IPS {
 			}
 			mPlaceConfidence.put(place.getLocationId(), current_confidence);
 		}
-		
-		last_confidence = best_confidence;
+	
+		last_confidence = best_confidence/reading.getSignals().size();
 		return new Location(best_location_id);
 	}
 
