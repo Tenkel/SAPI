@@ -9,6 +9,7 @@ import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -18,8 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import br.ufrj.cos.labia.aips.ips.IPS;
 import br.ufrj.cos.labia.aips.ips.Location;
@@ -28,8 +32,10 @@ import br.ufrj.cos.labia.aips.ips.WIFISignal;
 
 import com.tenkel.sapi.R;
 import com.tenkel.sapi.dal.AccessPointManager;
+import com.tenkel.sapi.dal.Andar;
 import com.tenkel.sapi.dal.AndarManager;
 import com.tenkel.sapi.dal.Bridge;
+import com.tenkel.sapi.dal.LeituraWiFi;
 import com.tenkel.sapi.dal.LeituraWifiManager;
 import com.tenkel.sapi.dal.Observacao;
 import com.tenkel.sapi.dal.ObservacaoManager;
@@ -55,13 +61,32 @@ public class AutoScanFragment extends Fragment {
 	private ObservacaoManager mObservacaoManager;
 	private LeituraWifiManager mLeituraWIFIManager;
 	private AccessPointManager mAccessPointManager;
-	private TreeMap<Long, Posicao> mPosicoes;
+	//private TreeMap<Long, Posicao> mPosicoes;
+	private List<Posicao> mPosicoes;
+	//private TreeMap<Long, Andar> mAndares;
+	private List<Andar> mAndares;
 	
+	private Posicao actual_posicao;
+	private Andar actual_andar;
 	
 	private NumberPicker Room;
+	private NumberPicker andar;
 	private ProgressBar LoopBar;
 	
+	private ImageButton addandar;
+	private ImageButton addposicao;
+	
+	private TextView aquisicoes;
+	private int naquisicoes;
+	private TextView naps;
+	private int nnaps;
+	private TextView maxpower;
+	private long nmaxpower;
+	
+	private int cycles;
+	
 	private IPS mIPS;
+	private AutoWifiReceiver receiver;
 
 	// Dialogs
 	private Chronometer chrono;
@@ -81,29 +106,119 @@ public class AutoScanFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		nmaxpower = Long.MIN_VALUE;
         View view = inflater.inflate(R.layout.fragment_autoscan, container, false);
 
+		// Managers
+		mAndarManager = new AndarManager(getActivity());
+		mPosicaoManager = new PosicaoManager(getActivity());
+		mObservacaoManager = new ObservacaoManager(getActivity());
+		mLeituraWIFIManager = new LeituraWifiManager(getActivity());
+		mAccessPointManager = new AccessPointManager(getActivity());
+
 		LoopBar = (ProgressBar) view.findViewById(R.id.captura_progress);
-		
+		aquisicoes = (TextView) view.findViewById(R.id.aquisicoes);
+		naps = (TextView) view.findViewById(R.id.naps);
+		maxpower = (TextView) view.findViewById(R.id.maxpower);
+		andar = (NumberPicker) view.findViewById(R.id.nandar);
 		Room = (NumberPicker) view.findViewById(R.id.local);
-		Room.setMaxValue(100);
-		Room.setMinValue(1);		
-
 		chrono = (Chronometer) view.findViewById(R.id.tempo);
-
 		Collect = (ToggleButton) view.findViewById(R.id.captura);
+		addandar = (ImageButton) view.findViewById(R.id.addAndar);
+		addposicao = (ImageButton) view.findViewById(R.id.addPosicao);
+		
+		cycles = 0;
+		receiver = new AutoWifiReceiver();
+		
+		andar.setMinValue(1);	
+		Room.setMinValue(1);	
+		
+		andar.setOnLongClickListener(new View.OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
+		Room.setOnLongClickListener(new View.OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
+		
+		mAndares = mAndarManager.getAllWithNullIdLocal();
+		int nandar;
+		if ((nandar = mAndares.size()) < 1){
+			actual_andar = new Andar();
+			actual_andar.setNome("Andar Atual");
+			mAndarManager.save(actual_andar);
+			andar.setMaxValue(1);	
+			andar.setValue(1);
+			mAndares.add(actual_andar);
+			
+			actual_posicao = new Posicao();
+			actual_posicao.setIdAndar(actual_andar.getId());
+			actual_posicao.setIdRemoto((long) 1);
+			mPosicaoManager.save(actual_posicao);
+			Room.setMaxValue(1);
+			Room.setValue(1);
+			mPosicoes = new ArrayList<Posicao>();
+			mPosicoes.add(actual_posicao);
+		}
+		else{			
+			actual_andar = mAndares.get(nandar-1);
+			andar.setMaxValue(nandar);	
+			andar.setValue(nandar);
+
+			int nroom;
+			mPosicoes = mPosicaoManager.getByidAndar(actual_andar.getId());
+			actual_posicao = mPosicoes.get((nroom = mPosicoes.size())-1);
+			Room.setMaxValue(nroom);
+			Room.setValue(nroom);
+		}
+
+		andar.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+			
+			public void onValueChange(NumberPicker picker, int oldVal, int newVal) {			
+				actual_andar = mAndares.get(newVal-1);
+				mPosicoes = mPosicaoManager.getByidAndar(actual_andar.getId());
+				int nroom;
+				actual_posicao = mPosicoes.get((nroom = mPosicoes.size())-1);
+				Room.setMaxValue(nroom);
+				Room.setValue(nroom);
+				FillActualData();
+			}
+		});
+		
+		Room.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+			
+			public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+				actual_posicao = mPosicoes.get(newVal-1);
+				FillActualData();
+			}
+		});
+		
+		
 		Collect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
 				if (isChecked) {
+					
 					chrono.setBase(SystemClock.elapsedRealtime());
 					chrono.start();
+					receiver.start();
 					Bridge.start(getActivity());
+					
 					LoopBar.setVisibility(View.VISIBLE);
 				} 
 				else {
 					Bridge.stop(getActivity());
+					receiver.stop();
 					chrono.stop();
 					LoopBar.setVisibility(View.INVISIBLE);
 				}
@@ -111,10 +226,64 @@ public class AutoScanFragment extends Fragment {
 			}
 		});
 
+		addandar.setOnClickListener( new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				int nandar;
+				actual_andar = new Andar();
+				actual_andar.setNome("Andar Atual");
+				mAndarManager.save(actual_andar);
+				mAndares.add(actual_andar);
+				andar.setMaxValue(nandar = mAndares.size());
+				andar.setValue(nandar);
+				
+				actual_posicao = new Posicao();
+				actual_posicao.setIdAndar(actual_andar.getId());
+				actual_posicao.setIdRemoto((long) 1);
+				mPosicaoManager.save(actual_posicao);
+				Room.setValue(1);
+				Room.setMaxValue(1);
+				mPosicoes = new ArrayList<Posicao>();
+				mPosicoes.add(actual_posicao);		
+			}
+		});
+		
+		addposicao.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				int nroom;
+				actual_posicao = new Posicao();
+				actual_posicao.setIdAndar(actual_andar.getId());
+				actual_posicao.setIdRemoto((long)(nroom = (mPosicoes.size()+1)));
+				mPosicaoManager.save(actual_posicao);
+				Room.setMaxValue(nroom);
+				Room.setValue(nroom);
+				mPosicoes.add(actual_posicao);
+			}
+		});
+
+		FillActualData();
+		
         return view;
 	}
 	
-	public class WifiReceiver2 extends BroadcastReceiver {
+	private void FillActualData(){
+		maxpower.setText(String.valueOf(nmaxpower = mLeituraWIFIManager.getMaxValueByidPosicao(actual_posicao.getId())));
+		naps.setText(String.valueOf(nnaps = mAccessPointManager.getByidPosicao(actual_posicao.getId()).size()));
+		aquisicoes.setText(String.valueOf(naquisicoes = mObservacaoManager.getByidPosicao(actual_posicao.getId()).size()));				
+	}
+	
+	public class AutoWifiReceiver extends BroadcastReceiver {
+		public void start(){
+			getActivity().registerReceiver(this, new IntentFilter(
+					Bridge.BROADCAST_SENSOR_DATA));
+		}
+		
+		public void stop(){
+			getActivity().unregisterReceiver(this);
+		}
+
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -126,19 +295,20 @@ public class AutoScanFragment extends Fragment {
 				return;
 			}
 			
+			aquisicoes.setText(String.valueOf(++cycles));
+			
 			Object[] objects = (Object[]) intent.getSerializableExtra("wifi");
-			ScanResult[] results = new ScanResult[objects.length];
+			int level;
 			for (int i=0; i<objects.length; ++i) 
-				results[i] = (ScanResult) objects[i];
+				if((level = ((ScanResult) objects[i]).level) > nmaxpower)
+					nmaxpower = level;
 			
-			
-			predictPosition(results);
+			maxpower.setText(String.valueOf((int)nmaxpower));
 			
 			Observacao obs = mObservacaoManager.getById(idObservacao);
-			obs.setidPosicao(mPosicaoIds[mAndarView.getSelectedX()][mAndarView.getSelectedY()]);
+			obs.setidPosicao(actual_posicao.getId());
 			mObservacaoManager.update(obs);
-			
-			mAndarView.addCollected(mAndarView.getSelectedX(), mAndarView.getSelectedY());
+			naps.setText(String.valueOf(nnaps = mAccessPointManager.getByidPosicao(actual_posicao.getId()).size()));
 		}
 	}
 	
@@ -159,8 +329,8 @@ public class AutoScanFragment extends Fragment {
 			return null;
 		}
 		
-		Posicao p = mPosicoes.get(l.getPointId());
-		return p.getId();
+		Posicao p = mPosicoes.get(1);//l.getPointId()
+		return l.getPointId();
 
 	}
 
