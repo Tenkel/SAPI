@@ -7,8 +7,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 
 public class LeituraWifiManager extends DataManager {
+	
+	SQLiteStatement maxvalue;
 
 	public LeituraWifiManager(Context c) {
 		super(c);
@@ -36,6 +39,42 @@ public class LeituraWifiManager extends DataManager {
 			Cursor c = db.rawQuery("SELECT " + LeituraWiFi.STRFIELDS 
 					+ " FROM " + LeituraWiFiTable 
 					+ " WHERE " + LeituraWiFi.IDACCESSPOINT + "=" + idAccessPoint, null);
+			
+			while (c.moveToNext())
+				list.add(readRecord(c));
+			
+			c.close();
+		} finally {
+			db.close();
+		}
+
+		return list;
+	}
+	
+	public long getMaxValueByidPosicao(long idPosicao){
+		SQLiteDatabase db = getReadableDatabase();
+		maxvalue = db.compileStatement("SELECT MAX(" + LeituraWiFi.VALOR + ")" 
+				+ " FROM "+ LeituraWiFiTable + ", " + ObservacaoTable 
+				+ " WHERE " + LeituraWiFiTable + "." + LeituraWiFi.IDOBSERVACAO + " = " + ObservacaoTable + "." + Observacao.ID
+							+ " AND " 
+							+ ObservacaoTable + "." + Observacao.IDPOSICAO + "= ?");
+		maxvalue.bindLong(1, idPosicao);
+		long longmaxvalue = maxvalue.simpleQueryForLong();
+		db.close();
+
+		return longmaxvalue;
+	}
+
+	public List<LeituraWiFi> getByidPosicao(long idPosicao) {
+		List<LeituraWiFi> list = new ArrayList<LeituraWiFi>();
+		SQLiteDatabase db = getReadableDatabase();
+
+		try {
+			Cursor c = db.rawQuery("SELECT " + LeituraWiFi.STRFIELDS 
+					+ " FROM "+ LeituraWiFiTable + ", " + ObservacaoTable 
+					+ " WHERE " + LeituraWiFiTable + "." + LeituraWiFi.IDOBSERVACAO + " = " + ObservacaoTable + "." + Observacao.ID
+								+ " AND " 
+								+ ObservacaoTable + "." + Observacao.IDPOSICAO + "=" + idPosicao, null);
 			
 			while (c.moveToNext())
 				list.add(readRecord(c));
