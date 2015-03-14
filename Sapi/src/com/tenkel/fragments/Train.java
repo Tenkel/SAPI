@@ -61,6 +61,10 @@ public class Train extends Fragment {
 	private TextView guess;
 	private int cycles;
 	
+	public static Fragment newInstance() {
+		return new Train();
+	}
+	
 	@Override
 	public void onAttach(Activity activity) {
 		// TODO Auto-generated method stub
@@ -229,5 +233,7 @@ public class Train extends Fragment {
 			predictPosition(results);
 		}
 	}
+
+	
 	
 }
