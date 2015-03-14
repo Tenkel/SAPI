@@ -54,6 +54,8 @@ public class Train extends Fragment {
 	private ObservacaoManager mObservacaoManager;
 	private AndarManager mAndarManager;
 	private LeituraWifiManager mLeituraWIFIManager;
+	private PosicaoManager mPosicaoManager;
+	private AccessPointManager mAccessPointManager;
 	private List<Andar> mAndares;
 	private WifiReceiver mReceiver;
 	private Map<Long, AccessPoint> mAccessPoints;
@@ -87,8 +89,10 @@ public class Train extends Fragment {
      		mAndarManager = new AndarManager(getActivity());
      		mObservacaoManager = new ObservacaoManager(getActivity());
      		mLeituraWIFIManager = new LeituraWifiManager(getActivity());
-     		
      		mAndares = mAndarManager.getAllWithNullIdLocal();
+     		mPosicaoManager = new PosicaoManager(getActivity());
+     		mAccessPointManager = new AccessPointManager(getActivity());
+     		
      		// Ouvinte para os eventos do Bridge
      		mReceiver = new WifiReceiver();
         
@@ -126,24 +130,6 @@ public class Train extends Fragment {
 		});
 
         return view;
-	}
-	
-	public void onReceive(Context context, Intent intent) {
-		Log.i("RoomActivity", "Processing event from Bridge");
-		
-		long idObservacao = intent.getLongExtra("idObservacao", -1);
-		if (idObservacao == -1) {
-			Log.e("DebugRoomActivity", "Bridge did not send idObservacao, as expected");
-			return;
-		}
-		
-		Object[] objects = (Object[]) intent.getSerializableExtra("wifi");
-		ScanResult[] results = new ScanResult[objects.length];
-		for (int i=0; i<objects.length; ++i) 
-			results[i] = (ScanResult) objects[i];
-		
-		
-		predictPosition(results);
 	}
 	
 	private void predictPosition(ScanResult[] results) {
