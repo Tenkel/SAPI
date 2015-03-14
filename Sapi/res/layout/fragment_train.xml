@@ -19,7 +19,7 @@
         android:textOn="Predict On" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/aqc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="14dp"
@@ -28,7 +28,7 @@
         android:textColor="#0099FF" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/chute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1"

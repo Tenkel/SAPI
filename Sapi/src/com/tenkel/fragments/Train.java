@@ -7,8 +7,10 @@ import java.util.TreeMap;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,8 +20,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
-import br.ufrj.cos.labia.aips.customviews.AndarGridView;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog.Listener;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog.Worker;
@@ -28,53 +31,35 @@ import br.ufrj.cos.labia.aips.ips.Location;
 import br.ufrj.cos.labia.aips.ips.Reading;
 import br.ufrj.cos.labia.aips.ips.WIFISignal;
 
-import com.tenkel.sapi.DebugRoomActivity.WifiReceiver2;
 import com.tenkel.sapi.R;
 import com.tenkel.sapi.dal.AccessPoint;
 import com.tenkel.sapi.dal.AccessPointManager;
 import com.tenkel.sapi.dal.Andar;
 import com.tenkel.sapi.dal.AndarManager;
+import com.tenkel.sapi.dal.Bridge;
+import com.tenkel.sapi.dal.LeituraWiFi;
 import com.tenkel.sapi.dal.LeituraWifiManager;
+import com.tenkel.sapi.dal.Observacao;
 import com.tenkel.sapi.dal.ObservacaoManager;
 import com.tenkel.sapi.dal.Posicao;
 import com.tenkel.sapi.dal.PosicaoManager;
+import com.tenkel.sapi.kde.KDE;
 
 
-public class Train extends Fragment implements Listener {
+public class Train extends Fragment {
 	
 	private IPS mIPS;
-	private TreeMap<Long, Posicao> mPosicoes;
 	private ToggleButton Predict;
 	private Button Train;
 	private ObservacaoManager mObservacaoManager;
-	private long mIdLocal;
-	
 	private AndarManager mAndarManager;
-	private PosicaoManager mPosicaoManager;
 	private LeituraWifiManager mLeituraWIFIManager;
-	private AccessPointManager mAccessPointManager;
-	private long mAndarId;
-	private Andar mAndar;
-	private AndarGridView mAndarView;
-	private WifiReceiver2 mReceiver;
-	private Button mBtCollect;
-	private Button mBtTrain;
-	private int mState;
+	private List<Andar> mAndares;
+	private WifiReceiver mReceiver;
 	private Map<Long, AccessPoint> mAccessPoints;
-	private Long[][] mPosicaoIds;
-	private int mWidth;
-	private int mHeight;
-	
-	@Override
-	public void onPause() {
-		super.onPause();
-	}
-
-	@Override
-	public void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-	}
+	private TextView aquisicoes;
+	private TextView guess;
+	private int cycles;
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -87,19 +72,19 @@ public class Train extends Fragment implements Listener {
 			Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_train, container, false);
         
+        aquisicoes = (TextView) view.findViewById(R.id.aqc);
+        guess = (TextView) view.findViewById(R.id.chute);
+        Train = (Button) view.findViewById(R.id.buTrain);
+        
+        cycles = 0;
         	// Managers
-     		mAndarManager = new AndarManager(getApplicationContext());
-     		mPosicaoManager = new PosicaoManager(getApplicationContext());
-     		mObservacaoManager = new ObservacaoManager(getApplicationContext());
-     		mLeituraWIFIManager = new LeituraWifiManager(getApplicationContext());
-     		mAccessPointManager = new AccessPointManager(getApplicationContext());
+     		mAndarManager = new AndarManager(getActivity());
+     		mObservacaoManager = new ObservacaoManager(getActivity());
+     		mLeituraWIFIManager = new LeituraWifiManager(getActivity());
      		
-     		// Carrega o andar escolhido 
-     		mAndarId = getIntent().getExtras().getLong("andar_id");
-     		mAndar = mAndarManager.getFirstById(mAndarId);
-     		
+     		mAndares = mAndarManager.getAllWithNullIdLocal();
      		// Ouvinte para os eventos do Bridge
-     		mReceiver = new WifiReceiver2();
+     		mReceiver = new WifiReceiver();
         
         Predict = (ToggleButton) view.findViewById(R.id.predict);
         Predict.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -107,33 +92,31 @@ public class Train extends Fragment implements Listener {
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
 				if (isChecked) {
-
+					Train.setClickable(false);
+					mReceiver.start();
+					Bridge.start(getActivity());
 				} 
 				else {
+					Bridge.stop(getActivity());
+					mReceiver.stop();
+					Train.setClickable(true);
 				}
 
 			}
 		});
         
-        Train = (Button) view.findViewById(R.id.buTrain);
 		Train.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				LoadingDialog dialog = new LoadingDialog();
-				dialog.setWorker(new Worker() {
-						@Override
-						public void doHeavyWork(LoadingDialog dialog) {
-							try {
-								Thread.sleep(500);
-								trainModel();
-							} catch (InterruptedException e) {
-								
-							}
-						}
-					});
-				dialog.setListener(Train.this);
-				dialog.show(getFragmentManager(), "training");
-			}
+				new LoadingDialog()
+				.setWorker(new Worker() {
+					@Override
+					public void doHeavyWork(LoadingDialog dialog) {
+						trainModel();
+					}
+				})
+				.show(getFragmentManager(), "training_model");
+		}
 		});
 
         return view;
@@ -157,9 +140,9 @@ public class Train extends Fragment implements Listener {
 		predictPosition(results);
 	}
 	
-	private Long predictPosition(ScanResult[] results) {
+	private void predictPosition(ScanResult[] results) {
 		if (mIPS == null) 
-			return null;
+			return;
 		
 		List<WIFISignal> signals = new ArrayList<WIFISignal>();
 		for (ScanResult r : results) 
@@ -170,41 +153,81 @@ public class Train extends Fragment implements Listener {
 		
 		if (l == null || l.getPointId() == null)  {
 			Log.w("DebugRoomActivity", "IPS returned null as prediction");
-			return null;
+			return;
 		}
 		
-		Posicao p = mPosicoes.get(l.getPointId());
-		return p.getId();
+		else guess.setText(String.valueOf(l.getPointId()));
 
 	}
 	
 	private void trainModel() {
+		for (Andar andar : mAndares){
+		List<Observacao> samples = mObservacaoManager.getByIdAndar(andar.getId());
 		
+		List<WIFISignal> all = new ArrayList<WIFISignal>();
+		List<List<WIFISignal>> internal = new ArrayList<List<WIFISignal>>();
+		
+		for (Observacao s : samples) {
+			List<LeituraWiFi> signals = mLeituraWIFIManager.getByidObservacao(s.getId());
+			List<WIFISignal> signals2 = new ArrayList<WIFISignal>();
+			
+			for (LeituraWiFi s2 : signals) {
+				AccessPoint ap = mAccessPoints.get(s2.getIdAccessPoint());
+				WIFISignal s3 = new WIFISignal(ap.getbssid(), s2.getValor());
+				signals2.add(s3);
+				all.add(s3);
+			}
+			
+			internal.add(signals2);
+		}
+		
+		if (all.size() == 0) {
+			Toast.makeText(getActivity(), "No signals detected", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		if (mIPS != null) mIPS.close();
+		IPS ips = new KDE();
+		
+		int i = 0;
+		for (Observacao s : samples) {
+			ips.learn(new Reading(internal.get(i++)), new Location(s.getIdPosicao()));
+		}
+		
+		mIPS = ips;
+		}
 	}
 
-	@Override
-	public void onStart(Worker w) {
-		// TODO Auto-generated method stub
+	public class WifiReceiver extends BroadcastReceiver {
+		public void start(){
+			getActivity().registerReceiver(this, new IntentFilter(
+					Bridge.BROADCAST_SENSOR_DATA));
+		}
 		
-	}
+		public void stop(){
+			getActivity().unregisterReceiver(this);
+		}
 
-	@Override
-	public void onFinish(Worker w) {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public void onError(Worker w, Exception e) {
-		// TODO Auto-generated method stub
-		
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.i("RoomActivity", "Processing event from Bridge");
+			
+			long idObservacao = intent.getLongExtra("idObservacao", -1);
+			if (idObservacao == -1) {
+				Log.e("DebugRoomActivity", "Bridge did not send idObservacao, as expected");
+				return;
+			}
+			
+			aquisicoes.setText(String.valueOf(++cycles));
+			
+			Object[] objects = (Object[]) intent.getSerializableExtra("wifi");
+			ScanResult[] results = new ScanResult[objects.length];
+			for (int i=0; i<objects.length; ++i) 
+				results[i] = (ScanResult) objects[i];
+			
+			predictPosition(results);
+		}
 	}
-
-	@Override
-	public void onCancel(Worker w) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	
 }
