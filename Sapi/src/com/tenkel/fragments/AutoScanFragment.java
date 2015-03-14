@@ -311,7 +311,7 @@ public class AutoScanFragment extends Fragment {
 			maxpower.setText(String.valueOf((int)nmaxpower));
 			
 			for(AccessPoint ap :mAccessPointManager.getByIdObservacao(idObservacao))
-				mFuncaoPosicaoManager.save(new FuncaoPosicao(actual_posicao.getId(), ap.getId(), (long) 0, null));				
+				mFuncaoPosicaoManager.save(new FuncaoPosicao(actual_posicao.getId(), ap.getId(), null, null));				
 			
 			Observacao obs = mObservacaoManager.getById(idObservacao);
 			obs.setidPosicao(actual_posicao.getId());
