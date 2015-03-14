@@ -309,8 +309,8 @@ public class DataManager extends SQLiteOpenHelper {
 
 				  +"CONSTRAINT " + FuncaoPosicao.UNIQUE_FUNCAOTIPO +
 				    " UNIQUE (" + FuncaoPosicao.IDPOSICAO + ", " 
-				    		   + FuncaoPosicao.IDACCESSPOINT + ", " 
-				    		   + FuncaoPosicao.IDTIPO + ")"
+				    		   + FuncaoPosicao.IDACCESSPOINT + ")" //", " 
+				    		   //+ FuncaoPosicao.IDTIPO + ")"
 				  
 				  +");");
 

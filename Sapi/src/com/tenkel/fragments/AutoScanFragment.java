@@ -108,7 +108,6 @@ public class AutoScanFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		nmaxpower = Long.MIN_VALUE;
 		naquisicoes = 0;
         View view = inflater.inflate(R.layout.fragment_autoscan, container, false);
 
@@ -247,7 +246,8 @@ public class AutoScanFragment extends Fragment {
 				Room.setValue(1);
 				Room.setMaxValue(1);
 				mPosicoes = new ArrayList<Posicao>();
-				mPosicoes.add(actual_posicao);		
+				mPosicoes.add(actual_posicao);
+				FillActualData();
 			}
 		});
 		
@@ -263,6 +263,7 @@ public class AutoScanFragment extends Fragment {
 				Room.setMaxValue(nroom);
 				Room.setValue(nroom);
 				mPosicoes.add(actual_posicao);
+				FillActualData();
 			}
 		});
 
@@ -272,7 +273,12 @@ public class AutoScanFragment extends Fragment {
 	}
 	
 	private void FillActualData(){
-		maxpower.setText(String.valueOf(nmaxpower = mLeituraWIFIManager.getMaxValueByidPosicao(actual_posicao.getId())));
+		if((nmaxpower = mLeituraWIFIManager.getMaxValueByidPosicao(actual_posicao.getId())) == 0){
+			maxpower.setText("N/A");
+			nmaxpower = Long.MIN_VALUE;
+			}
+		else
+			maxpower.setText(String.valueOf(nmaxpower = mLeituraWIFIManager.getMaxValueByidPosicao(actual_posicao.getId())));
 		naps.setText(String.valueOf(nnaps = mAccessPointManager.getByFuncaoPosicaoIdPosicao(actual_posicao.getId()).size()));
 		aquisicoes.setText(String.valueOf(naquisicoes = mObservacaoManager.getByidPosicao(actual_posicao.getId()).size()));				
 	}
