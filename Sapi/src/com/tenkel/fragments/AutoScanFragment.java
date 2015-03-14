@@ -31,6 +31,7 @@ import br.ufrj.cos.labia.aips.ips.Reading;
 import br.ufrj.cos.labia.aips.ips.WIFISignal;
 
 import com.tenkel.sapi.R;
+import com.tenkel.sapi.dal.AccessPoint;
 import com.tenkel.sapi.dal.AccessPointManager;
 import com.tenkel.sapi.dal.Andar;
 import com.tenkel.sapi.dal.AndarManager;
@@ -82,9 +83,7 @@ public class AutoScanFragment extends Fragment {
 	private int nnaps;
 	private TextView maxpower;
 	private long nmaxpower;
-	
-	private int cycles;
-	
+		
 	private IPS mIPS;
 	private AutoWifiReceiver receiver;
 
@@ -107,6 +106,7 @@ public class AutoScanFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		nmaxpower = Long.MIN_VALUE;
+		naquisicoes = 0;
         View view = inflater.inflate(R.layout.fragment_autoscan, container, false);
 
 		// Managers
@@ -127,7 +127,6 @@ public class AutoScanFragment extends Fragment {
 		addandar = (ImageButton) view.findViewById(R.id.addAndar);
 		addposicao = (ImageButton) view.findViewById(R.id.addPosicao);
 		
-		cycles = 0;
 		receiver = new AutoWifiReceiver();
 		
 		andar.setMinValue(1);	
@@ -270,7 +269,7 @@ public class AutoScanFragment extends Fragment {
 	
 	private void FillActualData(){
 		maxpower.setText(String.valueOf(nmaxpower = mLeituraWIFIManager.getMaxValueByidPosicao(actual_posicao.getId())));
-		naps.setText(String.valueOf(nnaps = mAccessPointManager.getByidPosicao(actual_posicao.getId()).size()));
+		naps.setText(String.valueOf(nnaps = mAccessPointManager.getByObservacaoIdPosicao(actual_posicao.getId()).size()));
 		aquisicoes.setText(String.valueOf(naquisicoes = mObservacaoManager.getByidPosicao(actual_posicao.getId()).size()));				
 	}
 	
@@ -295,20 +294,22 @@ public class AutoScanFragment extends Fragment {
 				return;
 			}
 			
-			aquisicoes.setText(String.valueOf(++cycles));
+			aquisicoes.setText(String.valueOf(++naquisicoes));
 			
 			Object[] objects = (Object[]) intent.getSerializableExtra("wifi");
 			int level;
+			
 			for (int i=0; i<objects.length; ++i) 
 				if((level = ((ScanResult) objects[i]).level) > nmaxpower)
 					nmaxpower = level;
+				
 			
-			maxpower.setText(String.valueOf((int)nmaxpower));
+			maxpower.setText(String.valueOf((int)nmaxpower));			
 			
 			Observacao obs = mObservacaoManager.getById(idObservacao);
 			obs.setidPosicao(actual_posicao.getId());
 			mObservacaoManager.update(obs);
-			naps.setText(String.valueOf(nnaps = mAccessPointManager.getByidPosicao(actual_posicao.getId()).size()));
+			naps.setText(String.valueOf(nnaps = mAccessPointManager.getByObservacaoIdPosicao(actual_posicao.getId()).size()));
 		}
 	}
 	
