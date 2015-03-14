@@ -147,8 +147,11 @@ public class Train extends Fragment {
 	}
 	
 	private void predictPosition(ScanResult[] results) {
-		if (mIPS == null) 
+		if (mIPS == null){
+			guess.setText(String.valueOf(0));
+			confianca.setText(String.valueOf(0));
 			return;
+		}
 		
 		List<WIFISignal> signals = new ArrayList<WIFISignal>();
 		for (ScanResult r : results) 
@@ -170,7 +173,6 @@ public class Train extends Fragment {
 	}
 	
 	private void trainModel() {
-		if (mIPS != null) mIPS.close();
 		IPS ips = new KDE();
 		
 		for (Andar andar : mAndares){
