@@ -140,4 +140,28 @@ public class AndarManager extends DataManager {
 		return list;
 	}
 
+	public void update(Andar andar) {
+		SQLiteDatabase db = getWritableDatabase();
+		
+		String where = Andar.ID + "=" + andar.getId();
+		
+		try {
+			ContentValues values = new ContentValues();
+			//values.put(Andar.IDLOCAL, andar.getIdLocal());
+			values.put(Andar.NOME, andar.getNome());
+			values.put(Andar.URIMAPA, andar.getURIMapa());
+			values.put(Andar.CAMADAS, andar.getCamadas());
+			values.put(Andar.IDREMOTO, andar.getIdRemoto());
+			values.put(Andar.X1, andar.getX1());
+			values.put(Andar.Y1, andar.getY1());
+			values.put(Andar.X2, andar.getX2());
+			values.put(Andar.Y2, andar.getY2());
+			values.put(Andar.IMAGE, andar.getImage());
+			
+			db.update(AndarTable, values, where, null);
+		} finally {
+			db.close();
+		}
+	}
+
 }

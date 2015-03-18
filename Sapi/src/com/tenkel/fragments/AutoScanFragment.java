@@ -285,8 +285,10 @@ public class AutoScanFragment extends Fragment {
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 			    if ( actionId == EditorInfo.IME_ACTION_DONE ) {
 			    	andarnome.clearFocus();
-					imm.hideSoftInputFromWindow(andarnome.getWindowToken(), 0);			    	
-			    	Toast.makeText(getActivity(), "Process Action", Toast.LENGTH_SHORT).show();
+					imm.hideSoftInputFromWindow(andarnome.getWindowToken(), 0);
+					actual_andar.setNome(andarnome.getText().toString().trim());
+					mAndarManager.update(actual_andar);
+					andarnome.setText(actual_andar.getNome());
 			    	return true;
 			    }
 			    return false; // pass on to other listeners. 
