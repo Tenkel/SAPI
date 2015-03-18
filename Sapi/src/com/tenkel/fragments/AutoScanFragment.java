@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -69,6 +70,7 @@ public class AutoScanFragment extends Fragment {
 	private FuncaoPosicaoManager mFuncaoPosicaoManager;
 	private LeituraWifiManager mLeituraWIFIManager;
 	private AccessPointManager mAccessPointManager;
+	InputMethodManager imm;
 	//private TreeMap<Long, Posicao> mPosicoes;
 	private List<Posicao> mPosicoes;
 	//private TreeMap<Long, Andar> mAndares;
@@ -136,6 +138,8 @@ public class AutoScanFragment extends Fragment {
 		addandar = (ImageButton) view.findViewById(R.id.addAndar);
 		addposicao = (ImageButton) view.findViewById(R.id.addPosicao);
 		andarnome = (EditText) view.findViewById(R.id.andarnome);
+		
+		imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		
 		receiver = new AutoWifiReceiver();
 		
@@ -279,15 +283,11 @@ public class AutoScanFragment extends Fragment {
 			    new EditText.OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-			    if (actionId == EditorInfo.IME_ACTION_SEARCH ||
-			            actionId == EditorInfo.IME_ACTION_DONE ||
-			            event.getAction() == KeyEvent.ACTION_DOWN &&
-			            event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-			        if (!event.isShiftPressed()) {
-			           
-
-			           return true; // consume.
-			        }                
+			    if ( actionId == EditorInfo.IME_ACTION_DONE ) {
+			    	andarnome.clearFocus();
+					imm.hideSoftInputFromWindow(andarnome.getWindowToken(), 0);			    	
+			    	Toast.makeText(getActivity(), "Process Action", Toast.LENGTH_SHORT).show();
+			    	return true;
 			    }
 			    return false; // pass on to other listeners. 
 			}
