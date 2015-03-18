@@ -1,5 +1,12 @@
 package com.tenkel.sapi.dal;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -444,6 +451,46 @@ public class DataManager extends SQLiteOpenHelper {
 	public void onConfigure(SQLiteDatabase db) {
 		db.setForeignKeyConstraintsEnabled(true);
 		super.onConfigure(db);
+	}
+	
+	// Export Database to a given path with a given name
+	public void DBexport(String toPath, String name) throws IOException {
+		Log.i("DBexport", "Exportando BD com nome "+ name +" para " + toPath);
+		SQLiteDatabase db = getWritableDatabase();
+		
+		try {
+			String dbPath = db.getPath();
+			Log.i("DBexport", "Exportando BD " + dbPath);
+			FileInputStream newDb = new FileInputStream(new File(dbPath));
+			FileOutputStream toFile = new FileOutputStream(new File(toPath, name));
+			FileChannel fromChannel = null;
+			FileChannel toChannel = null;
+			try {
+				fromChannel = newDb.getChannel();
+				toChannel = toFile.getChannel();
+				fromChannel.transferTo(0, fromChannel.size(), toChannel);
+			} finally {
+				try {
+					if (fromChannel != null) {
+						fromChannel.close();
+						newDb.close();
+					}
+				} finally {
+					if (toChannel != null) {
+						toChannel.close();
+						toFile.close();
+					}
+				}
+			}
+		} finally {
+			db.close();
+		}
+
+	}
+
+	// Overload DBexport for a std name called BDbackup.db
+	public void DBexport( String toPath) throws IOException {
+		DBexport( toPath, DB_NAME);
 	}
 
 }
