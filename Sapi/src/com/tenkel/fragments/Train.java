@@ -1,5 +1,6 @@
 package com.tenkel.fragments;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -14,6 +15,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +66,7 @@ public class Train extends Fragment {
 	private TextView guess;
 	private TextView confianca;
 	private int cycles;
+	private Button Export_BD;
 	
 	public static Fragment newInstance() {
 		return new Train();
@@ -84,6 +87,7 @@ public class Train extends Fragment {
         guess = (TextView) view.findViewById(R.id.chute);
         confianca = (TextView) view.findViewById(R.id.confianca);
         Train = (Button) view.findViewById(R.id.buTrain);
+        Export_BD = (Button) view.findViewById(R.id.export_bd);
         
         cycles = 0;
         	// Managers
@@ -131,6 +135,23 @@ public class Train extends Fragment {
 		}
 		});
 
+        Export_BD.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View view) {
+				String state = Environment.getExternalStorageState();
+				if (Environment.MEDIA_MOUNTED.equals(state)) {
+				try {
+					mAccessPointManager.DBexport( getActivity().getExternalFilesDir(null).getAbsolutePath());
+					Toast.makeText( getActivity(), "BD exportado.", Toast.LENGTH_SHORT).show();					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				}
+				else{
+				Toast.makeText( getActivity(), "Media cannot be written.", Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
 
 		carregarAccessPoints();
         return view;
