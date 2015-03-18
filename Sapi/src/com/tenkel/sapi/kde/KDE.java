@@ -100,7 +100,7 @@ public class KDE implements IPS {
 						return (o1.getValue()).compareTo(o2.getValue());
 					}
 				});
-		 
+		 Collections.reverse(list);
 				// Convert sorted map back to a Map
 		LinkedHashMap<Location, Float> sortedMap = new LinkedHashMap<Location, Float>();
 				for (Iterator<Map.Entry<Location, Float>> it = list.iterator(); it.hasNext();) {
