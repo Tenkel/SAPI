@@ -70,9 +70,9 @@ public class KDE implements IPS {
 	}
 
 	@Override
-	public Map<Location, Float> predict(Reading reading) {
-		HashMap<Location, Float> hmap = new HashMap<Location, Float>(); 
-		float best_confidence = Float.NEGATIVE_INFINITY;
+	public LinkedHashMap<Location, Float> predict(Reading reading) {
+		LinkedHashMap<Location, Float> hmap = new LinkedHashMap<Location, Float>(); 
+		float best_confidence = Float.NEGATIVE_INFINITY; 
 //		Long best_location_id = null;
 		float current_confidence;
 		for(int i = 0; i < mPlace.size(); i++) {
@@ -84,12 +84,12 @@ public class KDE implements IPS {
 			mPlaceConfidence.put(place.getLocationId(), current_confidence);
 			hmap.put(new Location(place.getLocationId()),current_confidence);
 		}
-		Map<Location, Float> smap = sortByComparator(hmap);
+		LinkedHashMap<Location, Float> smap = sortByComparator(hmap);
 		last_confidence = best_confidence/reading.getSignals().size();
 		return smap;
 	}
 
-	private Map<Location, Float> sortByComparator(HashMap<Location, Float> hmap) {
+	private LinkedHashMap<Location, Float> sortByComparator(LinkedHashMap<Location, Float> hmap) {
 		// Convert Map to List
 		List<Map.Entry<Location, Float>> list = new LinkedList<Map.Entry<Location, Float>>(hmap.entrySet());
 		 
@@ -102,7 +102,7 @@ public class KDE implements IPS {
 				});
 		 
 				// Convert sorted map back to a Map
-				Map<Location, Float> sortedMap = new LinkedHashMap<Location, Float>();
+		LinkedHashMap<Location, Float> sortedMap = new LinkedHashMap<Location, Float>();
 				for (Iterator<Map.Entry<Location, Float>> it = list.iterator(); it.hasNext();) {
 					Map.Entry<Location, Float> entry = it.next();
 					sortedMap.put(entry.getKey(), entry.getValue());
