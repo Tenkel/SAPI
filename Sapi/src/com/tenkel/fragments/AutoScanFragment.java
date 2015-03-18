@@ -1,6 +1,7 @@
 package com.tenkel.fragments;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -342,8 +343,8 @@ public class AutoScanFragment extends Fragment {
 			signals.add(new WIFISignal(r.BSSID, r.level));
 		
 		Reading reading = new Reading(signals);
-		ArrayList<Location> locationList = mIPS.predict(reading);
-		Location l = locationList.get(0);
+		LinkedHashMap<Location, Float> map = (LinkedHashMap<Location, Float>) mIPS.predict(reading);
+		Location l = map.keySet().iterator().next();
 		if (l == null || l.getPointId() == null)  {
 			Log.w("DebugRoomActivity", "IPS returned null as prediction");
 			return null;

@@ -10,7 +10,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -65,8 +70,8 @@ public class KDE implements IPS {
 	}
 
 	@Override
-	public ArrayList<Location> predict(Reading reading) {
-		HashMap<Float,Location> hmap = new HashMap<Float,Location>(); 
+	public Map<Location, Float> predict(Reading reading) {
+		HashMap<Location, Float> hmap = new HashMap<Location, Float>(); 
 		float best_confidence = Float.NEGATIVE_INFINITY;
 //		Long best_location_id = null;
 		float current_confidence;
@@ -77,11 +82,32 @@ public class KDE implements IPS {
 				best_confidence = current_confidence;
 			}
 			mPlaceConfidence.put(place.getLocationId(), current_confidence);
-			hmap.put(current_confidence, new Location(place.getLocationId()));
+			hmap.put(new Location(place.getLocationId()),current_confidence);
 		}
-		Map<Float, Location> tmap = new TreeMap<Float, Location>(hmap);
+		Map<Location, Float> smap = sortByComparator(hmap);
 		last_confidence = best_confidence/reading.getSignals().size();
-		return new ArrayList<Location>(tmap.values());
+		return smap;
+	}
+
+	private Map<Location, Float> sortByComparator(HashMap<Location, Float> hmap) {
+		// Convert Map to List
+		List<Map.Entry<Location, Float>> list = new LinkedList<Map.Entry<Location, Float>>(hmap.entrySet());
+		 
+		// Sort list with comparator, to compare the Map values
+		Collections.sort(list, new Comparator<Map.Entry<Location, Float>>() {
+					public int compare(Map.Entry<Location, Float> o1,
+		                                           Map.Entry<Location, Float> o2) {
+						return (o1.getValue()).compareTo(o2.getValue());
+					}
+				});
+		 
+				// Convert sorted map back to a Map
+				Map<Location, Float> sortedMap = new LinkedHashMap<Location, Float>();
+				for (Iterator<Map.Entry<Location, Float>> it = list.iterator(); it.hasNext();) {
+					Map.Entry<Location, Float> entry = it.next();
+					sortedMap.put(entry.getKey(), entry.getValue());
+				}
+				return sortedMap;
 	}
 
 	@Override

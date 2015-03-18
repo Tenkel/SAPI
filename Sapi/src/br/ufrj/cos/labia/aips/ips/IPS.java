@@ -1,6 +1,7 @@
 package br.ufrj.cos.labia.aips.ips;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import android.content.Context;
 
@@ -8,7 +9,7 @@ public interface IPS {
 	
 	public void learn(Reading reading, Location location);
 	
-	public ArrayList<Location> predict(Reading reading);
+	public Map<Location, Float> predict(Reading reading);
 
 	public float getConfidence();
 	
