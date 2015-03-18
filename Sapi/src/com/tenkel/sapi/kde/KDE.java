@@ -9,6 +9,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 
 import com.tenkel.sapi.dal.ZipBuilder;
@@ -60,22 +65,23 @@ public class KDE implements IPS {
 	}
 
 	@Override
-	public Location predict(Reading reading) {
+	public ArrayList<Location> predict(Reading reading) {
+		HashMap<Float,Location> hmap = new HashMap<Float,Location>(); 
 		float best_confidence = Float.NEGATIVE_INFINITY;
-		Long best_location_id = null;
+//		Long best_location_id = null;
 		float current_confidence;
-		
 		for(int i = 0; i < mPlace.size(); i++) {
 			KDEPlace place = mPlace.valueAt(i);
 			if((current_confidence = place.getTendency(reading)) > best_confidence) {
-				best_location_id = place.getLocationId();
+//				best_location_id = place.getLocationId();
 				best_confidence = current_confidence;
 			}
 			mPlaceConfidence.put(place.getLocationId(), current_confidence);
+			hmap.put(current_confidence, new Location(place.getLocationId()));
 		}
-	
+		Map<Float, Location> tmap = new TreeMap<Float, Location>(hmap);
 		last_confidence = best_confidence/reading.getSignals().size();
-		return new Location(best_location_id);
+		return new ArrayList<Location>(tmap.values());
 	}
 
 	@Override
@@ -188,6 +194,12 @@ public class KDE implements IPS {
 		if (nomeVersao == null) return false;
 		if (nomeVersao.equals(KDEv0)) return true;
 		return false;
+	}
+
+	@Override
+	public float getProbability() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

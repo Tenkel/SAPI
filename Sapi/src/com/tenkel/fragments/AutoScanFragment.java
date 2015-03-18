@@ -342,8 +342,8 @@ public class AutoScanFragment extends Fragment {
 			signals.add(new WIFISignal(r.BSSID, r.level));
 		
 		Reading reading = new Reading(signals);
-		Location l = mIPS.predict(reading);
-		
+		ArrayList<Location> locationList = mIPS.predict(reading);
+		Location l = locationList.get(0);
 		if (l == null || l.getPointId() == null)  {
 			Log.w("DebugRoomActivity", "IPS returned null as prediction");
 			return null;
