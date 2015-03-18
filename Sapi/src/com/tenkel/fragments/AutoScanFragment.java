@@ -15,9 +15,11 @@ import android.net.wifi.ScanResult;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -272,6 +274,25 @@ public class AutoScanFragment extends Fragment {
 				FillActualData();
 			}
 		});
+		
+		andarnome.setOnEditorActionListener(
+			    new EditText.OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+			    if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+			            actionId == EditorInfo.IME_ACTION_DONE ||
+			            event.getAction() == KeyEvent.ACTION_DOWN &&
+			            event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+			        if (!event.isShiftPressed()) {
+			           
+
+			           return true; // consume.
+			        }                
+			    }
+			    return false; // pass on to other listeners. 
+			}
+
+			});
 
 		FillActualData();
 		andarnome.setText(actual_andar.getNome());
