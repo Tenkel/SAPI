@@ -127,6 +127,7 @@
             android:id="@+id/andarnome"
             android:layout_gravity="end"
             android:lines="1"
+            android:imeOptions="actionDone"
             android:maxLines="1"
             android:ems="8" >
         </EditText>
