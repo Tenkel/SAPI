@@ -25,9 +25,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import br.ufrj.cos.labia.aips.customviews.LocationRow;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog.Listener;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog.Worker;
@@ -48,6 +50,7 @@ import com.tenkel.sapi.dal.Observacao;
 import com.tenkel.sapi.dal.ObservacaoManager;
 import com.tenkel.sapi.dal.Posicao;
 import com.tenkel.sapi.dal.PosicaoManager;
+import com.tenkel.sapi.kde.FoundLocation;
 import com.tenkel.sapi.kde.KDE;
 
 
@@ -56,6 +59,7 @@ public class Train extends Fragment {
 	private IPS mIPS;
 	private ToggleButton Predict;
 	private Button Train;
+	private TableLayout locationTable;
 	private ObservacaoManager mObservacaoManager;
 	private AndarManager mAndarManager;
 	private LeituraWifiManager mLeituraWIFIManager;
@@ -94,6 +98,7 @@ public class Train extends Fragment {
         probabilidade = (TextView) view.findViewById(R.id.probabilidade);
         Train = (Button) view.findViewById(R.id.buTrain);
         Export_BD = (Button) view.findViewById(R.id.export_bd);
+        locationTable = (TableLayout) view.findViewById(R.id.locationTable);
         
         cycles = 0;
         	// Managers
@@ -164,6 +169,8 @@ public class Train extends Fragment {
 	}
 	
 	private void predictPosition(ScanResult[] results) {
+		locationTable.removeAllViews();
+		
 		if (mIPS == null){
 			guess.setText(String.valueOf(0));
 			confianca.setText(String.valueOf(0));
@@ -190,6 +197,37 @@ public class Train extends Fragment {
 			probabilidade.setText(String.valueOf(probability)); 
 		}
 
+		LinkedHashMap<Location, Float> probabilites = getAllProbability(map);
+	    Iterator<Location> locations = map.keySet().iterator();
+		while (locations.hasNext()){
+			Location location = locations.next();
+			Posicao posicao = mPosicaoManager.getFirstById(location.getPointId());
+			Andar andar = mAndarManager.getFirstById(posicao.getIdAndar());
+			FoundLocation foundlocation = new FoundLocation(posicao.getIdRemoto(), andar.getNome(), mIPS.getConfidence(location), probabilites.get(location));
+			LocationRow row = new LocationRow(getActivity(),null);
+			row.setFounLocation(foundlocation);
+			locationTable.addView(row);
+		}
+		
+
+	}
+	
+	private LinkedHashMap<Location, Float> getAllProbability(LinkedHashMap<Location, Float> map){
+		LinkedHashMap<Location, Float> probabilities = new LinkedHashMap<Location, Float>();
+		
+		Double soma = 0.0;
+		
+		Iterator<Float> confiancas = map.values().iterator();
+	    while (confiancas.hasNext())
+	        soma+= Math.exp(confiancas.next());
+	    
+	    Iterator<Location> locations = map.keySet().iterator();
+		while (locations.hasNext()){
+			Location location = locations.next();
+			probabilities.put(location, (float) (Math.exp(mIPS.getConfidence(location))*100.0/soma));
+		}
+		
+		return probabilities;
 	}
 	
 	private float getProbability(LinkedHashMap<Location, Float> map) {
