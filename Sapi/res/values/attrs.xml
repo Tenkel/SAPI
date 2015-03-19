@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <declare-styleable name="LocationRow">
+	   <attr name="andar" format="string" />
+	   <attr name="posicao" format="integer" />
+	   <attr name="probabilidade" format="float" />
+	   <attr name="confianca" format="float" />
+   </declare-styleable>    
+</resources>
