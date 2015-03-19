@@ -2,6 +2,7 @@ package com.tenkel.fragments;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,7 @@ public class Train extends Fragment {
 	private TextView aquisicoes;
 	private TextView guess;
 	private TextView confianca;
+	private TextView probabilidade;
 	private int cycles;
 	private Button Export_BD;
 	
@@ -86,6 +88,7 @@ public class Train extends Fragment {
         aquisicoes = (TextView) view.findViewById(R.id.aqc);
         guess = (TextView) view.findViewById(R.id.chute);
         confianca = (TextView) view.findViewById(R.id.confianca);
+        probabilidade = (TextView) view.findViewById(R.id.probabilidade);
         Train = (Button) view.findViewById(R.id.buTrain);
         Export_BD = (Button) view.findViewById(R.id.export_bd);
         
@@ -169,7 +172,7 @@ public class Train extends Fragment {
 			signals.add(new WIFISignal(r.BSSID, r.level));
 		
 		Reading reading = new Reading(signals);
-		LinkedHashMap<Location, Float> map = (LinkedHashMap<Location, Float>) mIPS.predict(reading);
+		LinkedHashMap<Location, Float> map = mIPS.predict(reading);
 		Location l = map.keySet().iterator().next();
 		
 		if (l == null || l.getPointId() == null)  {
@@ -178,12 +181,27 @@ public class Train extends Fragment {
 		}
 		
 		else{ 
+			float probability = getProbability(map);
 			guess.setText(String.valueOf(l.getPointId()));
 			confianca.setText(String.valueOf(mIPS.getConfidence()));
+			probabilidade.setText(String.valueOf(probability)); 
 		}
 
 	}
 	
+	private float getProbability(LinkedHashMap<Location, Float> map) {
+		float soma=0;
+		if (mIPS.getConfidence()==Float.NEGATIVE_INFINITY) return 0;
+		Iterator<Float> it = map.values().iterator();
+	    while (it.hasNext()) {
+	    	float confianca = it.next();
+	        if (confianca!=Float.NEGATIVE_INFINITY)
+	        soma+= Math.exp(confianca);
+		}
+		
+		return (float) (Math.exp(mIPS.getConfidence())*100/soma);
+	}
+
 	private void trainModel() {
 		IPS ips = new KDE();
 		

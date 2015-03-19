@@ -9,16 +9,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.UUID;
 
 import com.tenkel.sapi.dal.ZipBuilder;
@@ -220,12 +217,6 @@ public class KDE implements IPS {
 		if (nomeVersao == null) return false;
 		if (nomeVersao.equals(KDEv0)) return true;
 		return false;
-	}
-
-	@Override
-	public float getProbability() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 }

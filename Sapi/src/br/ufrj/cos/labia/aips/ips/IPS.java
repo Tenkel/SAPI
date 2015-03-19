@@ -13,8 +13,6 @@ public interface IPS {
 
 	public float getConfidence();
 	
-	public float getProbability();
-	
 	public float getConfidence(Location location);
 	
 	public void close();
