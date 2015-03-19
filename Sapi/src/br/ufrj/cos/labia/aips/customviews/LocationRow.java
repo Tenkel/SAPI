@@ -35,25 +35,30 @@ public class LocationRow extends TableRow {
 	    
 	    andar.setLayoutParams(innerParamsw2);
 	    andar.setGravity(Gravity.CENTER);
-	    if((string_temporary = attrs.getAttributeValue(tenkel_xmls, "andar"))!= null)
-	    	andar.setText(string_temporary);
-	    else
-	    	andar.setText("Andar Atual");
+	    if(attrs != null){
+		    if((string_temporary = attrs.getAttributeValue(tenkel_xmls, "andar"))!= null)
+		    	andar.setText(string_temporary);
+		    else
+		    	andar.setText("Andar Atual");
+	    }
 	    
 	    posicao.setLayoutParams(innerParamsw1);
 	    posicao.setGravity(Gravity.CENTER);
 	    posicao.setTextColor(getResources().getColor(R.color.Red));
-    	posicao.setText(String.valueOf(attrs.getAttributeUnsignedIntValue(tenkel_xmls, "posicao", 0)));
+	    if(attrs != null)
+	    	posicao.setText(String.valueOf(attrs.getAttributeUnsignedIntValue(tenkel_xmls, "posicao", 0)));
 	    
 	    probabilidade.setLayoutParams(innerParamsw1);
 	    probabilidade.setGravity(Gravity.CENTER);
 	    probabilidade.setTextColor(getResources().getColor(R.color.black));
-	    probabilidade.setText(String.format("%.1f",attrs.getAttributeFloatValue(tenkel_xmls, "probabilidade", 0))+"%");
+	    if(attrs != null)
+	    	probabilidade.setText(String.format("%.1f",attrs.getAttributeFloatValue(tenkel_xmls, "probabilidade", 0))+"%");
 	    
 	    confianca.setLayoutParams(innerParamsw1);
 	    confianca.setGravity(Gravity.CENTER);
 	    confianca.setTextColor(getResources().getColor(R.color.green));
-	    confianca.setText(String.format("%.2f",attrs.getAttributeFloatValue(tenkel_xmls, "confianca", 0)));
+	    if(attrs != null)
+	    	confianca.setText(String.format("%.2f",attrs.getAttributeFloatValue(tenkel_xmls, "confianca", 0)));
 
         //add views to row
         this.addView(andar);

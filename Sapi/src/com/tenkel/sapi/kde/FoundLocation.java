@@ -13,10 +13,10 @@ public class FoundLocation {
 		super();
 	}
 
-	public FoundLocation(Long pointId, String AndarId, Float Confianca, Float Probabilidade) {
+	public FoundLocation(Long pointId, String andarName, Float Confianca, Float Probabilidade) {
 		super();
 		this.setPointId(pointId);
-		this.setAndarName(AndarId);
+		this.setAndarName(andarName);
 		this.setConfianca(Confianca);
 		this.setProbabilidade(Probabilidade);
 	}
