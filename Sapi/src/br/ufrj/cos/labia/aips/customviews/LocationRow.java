@@ -1,6 +1,7 @@
 package br.ufrj.cos.labia.aips.customviews;
 
 import com.tenkel.sapi.R;
+import com.tenkel.sapi.kde.FoundLocation;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -59,6 +60,35 @@ public class LocationRow extends TableRow {
         this.addView(posicao);
         this.addView(probabilidade);
         this.addView(confianca);
+	}
+	
+	public void setAndar(String andar_name){
+    	andar.setText(andar_name);
+    	this.invalidate();
+	}
+	
+	public void setPosicao(int posicao){
+    	this.posicao.setText(String.valueOf(posicao));
+    	this.invalidate();
+	}
+	
+	public void setProbabilidade(float probabilidade){
+		this.probabilidade.setText(String.format("%.1f",probabilidade)+"%");
+    	this.invalidate();
+	}
+	
+	public void setConfianca(float confianca){
+	    this.confianca.setText(String.format("%.2f",confianca));
+    	this.invalidate();	
+	}
+	
+	public void setFounLocation(FoundLocation location){
+    	andar.setText(location.getAndarName());
+    	this.posicao.setText(String.valueOf(location.getPointId()));
+		this.probabilidade.setText(String.format("%.1f",location.getProbabilidade())+"%");
+	    this.confianca.setText(String.format("%.2f",location.getConfianca()));
+    	this.invalidate();	
+		
 	}
 
 
