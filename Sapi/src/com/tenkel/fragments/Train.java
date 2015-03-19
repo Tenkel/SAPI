@@ -24,6 +24,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -69,6 +70,7 @@ public class Train extends Fragment {
 	private TextView probabilidade;
 	private int cycles;
 	private Button Export_BD;
+	private ProgressBar TrainProgress;
 	
 	public static Fragment newInstance() {
 		return new Train();
@@ -84,7 +86,8 @@ public class Train extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_train, container, false);
-        
+
+        TrainProgress = (ProgressBar) view.findViewById(R.id.trainProgress);
         aquisicoes = (TextView) view.findViewById(R.id.aqc);
         guess = (TextView) view.findViewById(R.id.chute);
         confianca = (TextView) view.findViewById(R.id.confianca);
@@ -204,8 +207,14 @@ public class Train extends Fragment {
 
 	private void trainModel() {
 		IPS ips = new KDE();
+
+		TrainProgress.setProgress(0);
+		TrainProgress.setVisibility(View.VISIBLE);
 		
-		for (Posicao posicao : mPosicaoManager.getAll()){
+		List<Posicao> full_list = mPosicaoManager.getAll();
+		
+		TrainProgress.setMax(full_list.size());
+		for (Posicao posicao : full_list){
 			List<WIFISignal> wifi_readings = new ArrayList<WIFISignal>();
 			
 			for (LeituraWiFi wifisample : mLeituraWIFIManager.getByidPosicao(posicao.getId()))
@@ -213,7 +222,10 @@ public class Train extends Fragment {
 			
 			ips.learn(new Reading(wifi_readings), new Location(posicao.getId()));
 			
+			TrainProgress.incrementProgressBy(1);
 		}
+		
+		TrainProgress.setVisibility(View.INVISIBLE);
 		
 		mIPS = ips;
 	}
