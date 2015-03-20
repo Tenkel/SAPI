@@ -169,7 +169,7 @@ public class Train extends Fragment {
 	}
 	
 	private void predictPosition(ScanResult[] results) {
-		locationTable.removeAllViews();
+		//locationTable.removeAllViews();
 		
 		if (mIPS == null){
 			guess.setText(String.valueOf(0));
@@ -207,6 +207,7 @@ public class Train extends Fragment {
 			LocationRow row = new LocationRow(getActivity(),null);
 			row.setFounLocation(foundlocation);
 			locationTable.addView(row);
+			locationTable.invalidate();
 		}
 		
 
@@ -231,7 +232,7 @@ public class Train extends Fragment {
 	}
 	
 	private float getProbability(LinkedHashMap<Location, Float> map) {
-		float soma=0;
+		Double soma = 0.0;
 		if (mIPS.getConfidence()==Float.NEGATIVE_INFINITY) return 0;
 		Iterator<Float> it = map.values().iterator();
 	    while (it.hasNext()) {
@@ -240,18 +241,19 @@ public class Train extends Fragment {
 	        soma+= Math.exp(confianca);
 		}
 		
-		return (float) (Math.exp(mIPS.getConfidence())*100/soma);
+		return (float) (Math.exp(mIPS.getConfidence())*100.0/soma);
 	}
 
 	private void trainModel() {
 		IPS ips = new KDE();
 
-		TrainProgress.setProgress(0);
-		TrainProgress.setVisibility(View.VISIBLE);
+		//TrainProgress.setProgress(0);
+		//TrainProgress.setVisibility(View.VISIBLE);
+		//TrainProgress.postInvalidate();
 		
 		List<Posicao> full_list = mPosicaoManager.getAll();
 		
-		TrainProgress.setMax(full_list.size());
+		//TrainProgress.setMax(full_list.size());
 		for (Posicao posicao : full_list){
 			List<WIFISignal> wifi_readings = new ArrayList<WIFISignal>();
 			
@@ -260,10 +262,12 @@ public class Train extends Fragment {
 			
 			ips.learn(new Reading(wifi_readings), new Location(posicao.getId()));
 			
-			TrainProgress.incrementProgressBy(1);
+			//TrainProgress.incrementProgressBy(1);
+			//TrainProgress.postInvalidate();
 		}
 		
-		TrainProgress.setVisibility(View.INVISIBLE);
+		//TrainProgress.setVisibility(View.INVISIBLE);
+		//TrainProgress.postInvalidate();
 		
 		mIPS = ips;
 	}
