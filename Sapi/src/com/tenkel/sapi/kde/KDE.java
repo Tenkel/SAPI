@@ -68,7 +68,7 @@ public class KDE implements IPS {
 
 	@Override
 	public LinkedHashMap<Location, Float> predict(Reading reading) {
-		LinkedHashMap<Location, Float> hmap = new LinkedHashMap<Location, Float>(); 
+		LinkedHashMap<Location, Float> location_confince_list = new LinkedHashMap<Location, Float>(); 
 		float best_confidence = Float.NEGATIVE_INFINITY; 
 //		Long best_location_id = null;
 		float current_confidence;
@@ -79,9 +79,11 @@ public class KDE implements IPS {
 				best_confidence = current_confidence;
 			}
 			mPlaceConfidence.put(place.getLocationId(), current_confidence);
-			hmap.put(new Location(place.getLocationId()),current_confidence);
+			location_confince_list.put(new Location(place.getLocationId()),current_confidence);
 		}
-		LinkedHashMap<Location, Float> smap = sortByComparator(hmap);
+		
+		
+		LinkedHashMap<Location, Float> smap = sortByComparator(location_confince_list);
 		last_confidence = best_confidence/reading.getSignals().size();
 		return smap;
 	}
