@@ -93,7 +93,7 @@
             android:text="0\%"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:textSize="30sp" />
+            android:textSize="23sp" />
 
     </RelativeLayout>
 
