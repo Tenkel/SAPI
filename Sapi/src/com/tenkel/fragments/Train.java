@@ -203,7 +203,7 @@ public class Train extends Fragment {
 			Location location = locations.next();
 			Posicao posicao = mPosicaoManager.getFirstById(location.getPointId());
 			Andar andar = mAndarManager.getFirstById(posicao.getIdAndar());
-			FoundLocation foundlocation = new FoundLocation(posicao.getIdRemoto(), andar.getNome(), mIPS.getConfidence(location), probabilites.get(location));
+			FoundLocation foundlocation = new FoundLocation(posicao.getIdRemoto(), andar.getNome(), map.get(location), probabilites.get(location));
 			LocationRow row = new LocationRow(getActivity(),null);
 			row.setFounLocation(foundlocation);
 			locationTable.addView(row,new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
