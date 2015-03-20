@@ -79,7 +79,7 @@ public class KDE implements IPS {
 				best_confidence = current_confidence;
 			}
 			mPlaceConfidence.put(place.getLocationId(), current_confidence);
-			location_confince_list.put(new Location(place.getLocationId()),current_confidence);
+			location_confince_list.put(new Location(place.getLocationId()),current_confidence/reading.getSignals().size());
 		}
 		
 		
