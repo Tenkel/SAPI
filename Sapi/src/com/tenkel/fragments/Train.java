@@ -169,7 +169,7 @@ public class Train extends Fragment {
 	}
 	
 	private void predictPosition(ScanResult[] results) {
-		//locationTable.removeAllViews();
+		locationTable.removeAllViews();
 		
 		if (mIPS == null){
 			guess.setText(String.valueOf(0));
@@ -206,7 +206,7 @@ public class Train extends Fragment {
 			FoundLocation foundlocation = new FoundLocation(posicao.getIdRemoto(), andar.getNome(), mIPS.getConfidence(location), probabilites.get(location));
 			LocationRow row = new LocationRow(getActivity(),null);
 			row.setFounLocation(foundlocation);
-			locationTable.addView(row);
+			locationTable.addView(row,new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
 			locationTable.invalidate();
 		}
 		
@@ -233,15 +233,12 @@ public class Train extends Fragment {
 	
 	private float getProbability(LinkedHashMap<Location, Float> map) {
 		Double soma = 0.0;
-		if (mIPS.getConfidence()==Float.NEGATIVE_INFINITY) return 0;
-		Iterator<Float> it = map.values().iterator();
-	    while (it.hasNext()) {
-	    	float confianca = it.next();
-	        if (confianca!=Float.NEGATIVE_INFINITY)
-	        soma+= Math.exp(confianca);
-		}
+
+		Iterator<Float> confiancas = map.values().iterator();
+	    while (confiancas.hasNext())
+	        soma+= Math.exp(confiancas.next());
 		
-		return (float) (Math.exp(mIPS.getConfidence())*100.0/soma);
+		return (float) (Math.exp(map.values().iterator().next())*100.0/soma);
 	}
 
 	private void trainModel() {
