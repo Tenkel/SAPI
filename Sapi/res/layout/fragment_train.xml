@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal|bottom"
-    android:orientation="vertical" >
+    android:orientation="vertical" xmlns:app="http://schemas.android.com/apk/res/com.tenkel.sapi">
 
     <Space
         android:layout_width="wrap_content"
@@ -128,7 +128,9 @@
             <br.ufrj.cos.labia.aips.customviews.LocationRow
                 android:id="@+id/locationRow1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                app:andar="\?" >
+
             </br.ufrj.cos.labia.aips.customviews.LocationRow>
         </TableLayout>
     </ScrollView>
