@@ -218,13 +218,16 @@ public class Train extends Fragment {
 		
 		Double soma = 0.0;
 		
-		Iterator<Float> confiancas = map.values().iterator();
-	    while (confiancas.hasNext())
-	        soma+= Math.exp(confiancas.next());
-	    
-	    Iterator<Location> locations = map.keySet().iterator();
+		Iterator<Location> locations = map.keySet().iterator();
 		while (locations.hasNext()){
 			Location location = locations.next();
+			soma+= (Double) (Math.exp(mIPS.getConfidence(location)));
+		}
+		
+
+	    Iterator<Location> locationes = map.keySet().iterator();
+		while (locationes.hasNext()){
+			Location location = locationes.next();
 			probabilities.put(location, (float) (Math.exp(mIPS.getConfidence(location))*100.0/soma));
 		}
 		
@@ -234,11 +237,13 @@ public class Train extends Fragment {
 	private float getProbability(LinkedHashMap<Location, Float> map) {
 		Double soma = 0.0;
 
-		Iterator<Float> confiancas = map.values().iterator();
-	    while (confiancas.hasNext())
-	        soma+= Math.exp(confiancas.next());
-		
-		return (float) (Math.exp(map.values().iterator().next())*100.0/soma);
+		Iterator<Location> locations = map.keySet().iterator();
+		while (locations.hasNext()){
+			Location location = locations.next();
+			soma+= (Double) (Math.exp(mIPS.getConfidence(location)));
+		}
+		Iterator<Location> locationes = map.keySet().iterator();
+		return (float) (Math.exp(mIPS.getConfidence(locationes.next()))*100.0/soma);
 	}
 
 	private void trainModel() {
