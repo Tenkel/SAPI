@@ -9,6 +9,7 @@ public class SharedPrefManager {
 	private static final String PREFERENCES_FILE = "aips_config_file";
 	private static final String ID_DISPOSITIVO = "idDispositivo";
 	private static final String IMEI = "imei";
+	private static final String ANDROIDID = "Android_ID";
 	
 	private SharedPreferences mPref;
 	private Editor mEditPref;
@@ -43,5 +44,10 @@ public class SharedPrefManager {
 				"SharedPrefManager is open as read only");
 		return mEditPref.commit();
 	}
+	
+	public String getAndroidID(Context context) {
+		
+		return mPref.getString(ANDROIDID, Dispositivo.getAndroidID(context));
+	} 
 	
 }

@@ -3,6 +3,7 @@ package com.tenkel.sapi.dal;
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import br.ufrj.cos.labia.aips.dto.DispositivoDTO;
 
@@ -40,6 +41,12 @@ public class Dispositivo {
 		TelephonyManager telephonyManager = (TelephonyManager) context
 				.getSystemService(Context.TELEPHONY_SERVICE);
 		return telephonyManager.getDeviceId();
+	}
+	
+	public static String getAndroidID(Context context){
+		String android_id = Secure.getString(context.getContentResolver(),
+	            Secure.ANDROID_ID);
+		return android_id;
 	}
 	
 }

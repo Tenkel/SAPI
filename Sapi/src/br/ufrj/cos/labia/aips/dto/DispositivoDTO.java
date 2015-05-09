@@ -10,4 +10,6 @@ public class DispositivoDTO {
 	
 	public String modelo;
 	
+	public String AndroidID;
+	
 }
