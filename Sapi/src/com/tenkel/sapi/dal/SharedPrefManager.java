@@ -10,6 +10,9 @@ public class SharedPrefManager {
 	private static final String ID_DISPOSITIVO = "idDispositivo";
 	private static final String IMEI = "imei";
 	private static final String ANDROIDID = "Android_ID";
+	private static final String ID_PAIS = "idPais";
+	private static final String ID_USER = "idUser";
+	private static final String TOKEN = null;
 	
 	private SharedPreferences mPref;
 	private Editor mEditPref;
@@ -37,6 +40,24 @@ public class SharedPrefManager {
 		if (mEditPref == null) throw new IllegalStateException(
 				"SharedPrefManager is open as read only");
 		mEditPref.putLong(ID_DISPOSITIVO, id);
+	}
+	
+	public void setPaisID(long id) {
+		if (mEditPref == null) throw new IllegalStateException(
+				"SharedPrefManager is open as read only");
+		mEditPref.putLong(ID_PAIS, id);
+	}
+	
+	public void setUserID(long id) {
+		if (mEditPref == null) throw new IllegalStateException(
+				"SharedPrefManager is open as read only");
+		mEditPref.putLong(ID_USER, id);
+	}
+	
+	public void setToken(String token) {
+		if (mEditPref == null) throw new IllegalStateException(
+				"SharedPrefManager is open as read only");
+		mEditPref.putString(TOKEN, token);
 	}
 	
 	public boolean save() {

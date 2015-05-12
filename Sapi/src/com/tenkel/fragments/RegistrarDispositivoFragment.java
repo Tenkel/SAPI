@@ -1,5 +1,8 @@
 package com.tenkel.fragments;
 
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -32,6 +35,8 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 
 	private EditText mFdLogin;
 	
+	private EditText mFdEmail;
+	
 	private EditText mFdSenha;
 	
 	private Button mBtRegistrar;
@@ -46,6 +51,7 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
         View view = inflater.inflate(layout.fragment_registrar_dispositivo, container, false);
         
         mFdLogin = (EditText) view.findViewById(R.id.fdLogin);
+        mFdEmail = (EditText) view.findViewById(R.id.fdEmail);
         mFdSenha = (EditText) view.findViewById(R.id.fdSenha);
         mBtRegistrar = (Button) view.findViewById(R.id.btRegistrar);
         mBtRegistrar.setOnClickListener(this);
@@ -74,17 +80,18 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 	public void onClick(View v) {
 		if (v == mBtRegistrar) {
 			String login = mFdLogin.getText().toString();
+			String email = mFdEmail.getText().toString();
 			String senha = mFdSenha.getText().toString();
-			DispositivoDTO dispositivo = com.tenkel.sapi.dal.Dispositivo.getInfoDispositivo(getActivity());
+			/*DispositivoDTO dispositivo = com.tenkel.sapi.dal.Dispositivo.getInfoDispositivo(getActivity());
 			
 			dispositivo.imei = new SharedPrefManager(getActivity(), false)
 					.getImei(getActivity());
 			
 			dispositivo.AndroidID = new SharedPrefManager(getActivity(), false)
 					.getAndroidID(getActivity());
-			
+			*/
 			LoadingDialog dialog = new LoadingDialog();
-			dialog.setWorker(new RegistrarWorker(login, senha, dispositivo));
+			dialog.setWorker(new RegistrarWorker(login, email, senha, "Brasil"));
 			dialog.setListener(this);
 			dialog.show(getFragmentManager(), "registrando");
 		} else {
@@ -136,23 +143,27 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 	class RegistrarWorker implements Worker {
 		
 		private String mLogin;
+		private String mEmail;
 		private String mSenha;
-		private DispositivoDTO mDispositivo;
+		private String mNomePais;
 		
-		public RegistrarWorker(String login, String senha, DispositivoDTO dispositivo) {
+		public RegistrarWorker(String login, String email, String senha, String nomepais) {
 			mLogin = login;
+			mEmail = email;
 			mSenha = senha;
-			mDispositivo = dispositivo;
+			mNomePais = nomepais;
 		}
 
 		@Override
 		public void doHeavyWork(LoadingDialog dialog) {
 			try {
 				Thread.sleep(500);
-				long idDispositivo = BasicConnector.registrarDispositivo(mLogin, mSenha, mDispositivo);
-				mSharedPrefManager.setIdDispositivo(idDispositivo);
+				SoapObject response = BasicConnector.registrarDispositivo(mLogin, mEmail, mSenha, mNomePais);
+				mSharedPrefManager.setPaisID((long) response.getProperty(3));
+				mSharedPrefManager.setUserID((long) response.getProperty(4));
+				mSharedPrefManager.setToken(response.getProperty(5).toString());
 				mSharedPrefManager.save();
-				Log.i("FragmentRegistrar", "Device is now registered with id " + idDispositivo);
+				Log.i("FragmentRegistrar", "Device is now registered with id " + response.getProperty(4).toString());
 			} catch (InterruptedException e) {
 				Log.e("FragmentRegistrarTelefone", "Operação interrompida");
 				e.printStackTrace();
@@ -165,3 +176,21 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 	}
 	
 }
+/*
+      <Erro>int</Erro>
+      <MensagemDeErro>string</MensagemDeErro>
+      <PaisId>int</PaisId>
+      <UsuarioEmpresaId>int</UsuarioEmpresaId>
+      <Token>string</Token>
+      <DataHoraServidor>dateTime</DataHoraServidor>
+      <ListaDeShoppings>
+        <ListaIdNome>
+          <EntityId>int</EntityId>
+          <EntityName>string</EntityName>
+        </ListaIdNome>
+        <ListaIdNome>
+          <EntityId>int</EntityId>
+          <EntityName>string</EntityName>
+        </ListaIdNome>
+      </ListaDeShoppings>
+*/

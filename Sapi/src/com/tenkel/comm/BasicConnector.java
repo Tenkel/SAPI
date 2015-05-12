@@ -1,44 +1,30 @@
 package com.tenkel.comm;
 
-import java.io.IOException;
 import org.ksoap2.SoapEnvelope;
-import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
 import android.util.Log;
-import br.ufrj.cos.labia.aips.dto.DispositivoDTO;
 
 public class BasicConnector {
 	
-	public static long registrarDispositivo(String login, String senha, DispositivoDTO dispositivo) throws CommunicationException {
+	public static SoapObject registrarDispositivo(String login, String email, String senha, String nomepais) throws CommunicationException {
 		Log.i("BasicConnector", "Sending Dispositivo");
+		
+		SoapObject response = null;
 		
 			//Create request
 			SoapObject request = new SoapObject(Config.NAMESPACE, Config.REGISTRAR);
 			String SOAP_ACTION = Config.NAMESPACE + Config.BASE_URL + "?op=" + Config.REGISTRAR;
 			String URL = Config.NAMESPACE + Config.BASE_URL;
 			
-			//Property which holds input parameters
-		    PropertyInfo Login = new PropertyInfo();
-		    PropertyInfo Email = new PropertyInfo();
-		    PropertyInfo Senha = new PropertyInfo();
-		    PropertyInfo NomePais = new PropertyInfo();
-		    //Set Name
-		    Login.setName("Login");
-		    Email.setName("Email");
-		    Senha.setName("Senha");
-		    NomePais.setName("NomePais");
-		    //Set Value
-		    Login.setValue(login);
-		    // TODO Email, Senha e NomePais
-		    //Set dataType
-		    Login.setType(String.class);
 		    //Add the property to request object
-		    request.addProperty(Login);
-			
+		    request.addProperty("Login",login);
+		    request.addProperty("Email",email);
+		    request.addProperty("Senha",senha);
+		    request.addProperty("NomePais",nomepais);
+		    
 			//Create envelope
 		    SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 		            SoapEnvelope.VER11);
@@ -54,15 +40,14 @@ public class BasicConnector {
 	        try {
 				androidHttpTransport.call(SOAP_ACTION, envelope);
 				//Get the response
-		        SoapPrimitive response = (SoapPrimitive) envelope.getResponse();
+		        response = (SoapObject) envelope.getResponse();
 		        
-		       // TODO Response
 		        
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				Log.i("BasicConnector", response.getProperty(1).toString());
 			}
-	        return 0;
+	        return response;
 		    
 		    	}
 
