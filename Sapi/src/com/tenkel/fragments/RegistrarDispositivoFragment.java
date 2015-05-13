@@ -57,7 +57,7 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
         mBtRegistrar.setOnClickListener(this);
 
         mSharedPrefManager = new SharedPrefManager(getActivity(), true);
-        if (mSharedPrefManager.getIdDispositivo() == -1)
+        if (mSharedPrefManager.getUserID() == -1)
         	showUnregisteredFrame(view);
         else
         	showRegisteredFrame(view);
@@ -95,7 +95,7 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 			dialog.setListener(this);
 			dialog.show(getFragmentManager(), "registrando");
 		} else {
-			mSharedPrefManager.setIdDispositivo(-1);
+			mSharedPrefManager.setUserID(-1);
 			mSharedPrefManager.save();
 			showUnregisteredFrame(getView());
 

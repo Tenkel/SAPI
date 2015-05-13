@@ -69,6 +69,10 @@ public class SharedPrefManager {
 	public String getAndroidID(Context context) {
 		
 		return mPref.getString(ANDROIDID, Dispositivo.getAndroidID(context));
+	}
+
+	public long getUserID() {
+		return mPref.getLong(ID_USER, -1);
 	} 
 	
 }
