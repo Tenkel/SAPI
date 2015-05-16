@@ -159,11 +159,12 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 			try {
 				Thread.sleep(500);
 				SoapObject response = BasicConnector.registrarDispositivo(mLogin, mEmail, mSenha, mNomePais);
-				mSharedPrefManager.setPaisID((long) response.getProperty(3));
-				mSharedPrefManager.setUserID((long) response.getProperty(4));
-				mSharedPrefManager.setToken(response.getProperty(5).toString());
+				mSharedPrefManager.setPaisID(Long.parseLong(response.getProperty(2).toString()));
+				mSharedPrefManager.setUserID(Long.parseLong(response.getProperty(3).toString()));
+				mSharedPrefManager.setToken(response.getProperty(4).toString());
+				mSharedPrefManager.setDT(response.getProperty(5).toString());
 				mSharedPrefManager.save();
-				Log.i("FragmentRegistrar", "Device is now registered with id " + response.getProperty(4).toString());
+				Log.i("FragmentRegistrar", "Device is now registered with id " + response.getProperty(3).toString());
 			} catch (InterruptedException e) {
 				Log.e("FragmentRegistrarTelefone", "Operação interrompida");
 				e.printStackTrace();

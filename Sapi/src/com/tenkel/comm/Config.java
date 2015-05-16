@@ -2,9 +2,9 @@ package com.tenkel.comm;
 
 public class Config {
 	
-	public static final String NAMESPACE = "http://customcare.outsystemscloud.com/Zelum/";
+	public static final String NAMESPACE = "http://www.outsystems.com/";
 	
-	public static final String BASE_URL = "WSGeoWiFi.asmx";
+	public static final String BASE_URL = "http://Zelum/WSGeoWiFi/";
 	
 	public static final String REGISTRAR = "Login";
 	

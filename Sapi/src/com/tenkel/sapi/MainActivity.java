@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.tenkel.fragments.AutoScanFragment;
+import com.tenkel.fragments.RegistrarDispositivoFragment;
 import com.tenkel.fragments.Train;
 import com.tenkel.sapi.R;
 
@@ -44,13 +45,19 @@ public class MainActivity extends Activity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         
-        if (position == 0) {
+    	if (position == 0) {
+        	FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, RegistrarDispositivoFragment.newInstance())
+                    .commit();
+        } 
+    	if (position == 1) {
         	FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.container, AutoScanFragment.newInstance())
                     .commit();
         } 
-        if (position == 1) {
+        if (position == 2) {
         	FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.container, Train.newInstance())

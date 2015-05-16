@@ -14,10 +14,10 @@ public class BasicConnector {
 		
 		SoapObject response = null;
 		
-			//Create request
+			//Create request	
 			SoapObject request = new SoapObject(Config.NAMESPACE, Config.REGISTRAR);
-			String SOAP_ACTION = Config.NAMESPACE + Config.BASE_URL + "?op=" + Config.REGISTRAR;
-			String URL = Config.NAMESPACE + Config.BASE_URL;
+			String SOAP_ACTION = Config.BASE_URL + Config.REGISTRAR;
+			String URL = "http://customcare.outsystemscloud.com/Zelum/WSGeoWiFi.asmx";
 			
 		    //Add the property to request object
 		    request.addProperty("Login",login);
@@ -32,7 +32,7 @@ public class BasicConnector {
 		    
 		    //Set output SOAP object
 		    envelope.setOutputSoapObject(request);
-		    
+
 		    //Create HTTP call object
 		    HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
 			
@@ -40,8 +40,7 @@ public class BasicConnector {
 	        try {
 				androidHttpTransport.call(SOAP_ACTION, envelope);
 				//Get the response
-		        response = (SoapObject) envelope.getResponse();
-		        
+		        response = (SoapObject) envelope.bodyIn;
 		        
 			} catch (Exception e) {
 				e.printStackTrace();

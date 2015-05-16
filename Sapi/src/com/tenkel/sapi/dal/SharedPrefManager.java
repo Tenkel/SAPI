@@ -13,6 +13,7 @@ public class SharedPrefManager {
 	private static final String ID_PAIS = "idPais";
 	private static final String ID_USER = "idUser";
 	private static final String TOKEN = null;
+	private static final String DATE_TIME  = null;
 	
 	private SharedPreferences mPref;
 	private Editor mEditPref;
@@ -73,6 +74,12 @@ public class SharedPrefManager {
 
 	public long getUserID() {
 		return mPref.getLong(ID_USER, -1);
+	}
+
+	public void setDT(String tempoinicio) {
+		if (mEditPref == null) throw new IllegalStateException(
+				"SharedPrefManager is open as read only");
+		mEditPref.putString(DATE_TIME, tempoinicio);
 	} 
 	
 }
