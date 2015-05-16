@@ -1,10 +1,12 @@
 package com.tenkel.comm;
 
 import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+
 import android.util.Log;
 
 public class BasicConnector {
@@ -19,12 +21,41 @@ public class BasicConnector {
 			String SOAP_ACTION = Config.BASE_URL + Config.REGISTRAR;
 			String URL = "http://customcare.outsystemscloud.com/Zelum/WSGeoWiFi.asmx";
 			
+			//Add the property to request object
+			PropertyInfo Login = new PropertyInfo();
+			PropertyInfo Email = new PropertyInfo();
+			PropertyInfo Senha = new PropertyInfo();
+			PropertyInfo NomePais = new PropertyInfo();
+			
+		    Login.setName("Login");
+		    Email.setName("Email");
+		    Senha.setName("Senha");
+		    NomePais.setName("NomePais");
+		    
+		    Login.setValue(login);
+		    Email.setValue(email);
+		    Senha.setValue(senha);
+		    NomePais.setValue(nomepais);
+		    
+		    Login.setType(String.class);
+		    Email.setType(String.class);
+		    Senha.setType(String.class);
+		    NomePais.setType(String.class);
+		    
+		    request.addProperty(Login);
+		    request.addProperty(Email);
+		    request.addProperty(Senha);
+		    request.addProperty(NomePais);
+			
+			
+			
 		    //Add the property to request object
+		    /*
 		    request.addProperty("Login",login);
 		    request.addProperty("Email",email);
 		    request.addProperty("Senha",senha);
 		    request.addProperty("NomePais",nomepais);
-		    
+		    */
 			//Create envelope
 		    SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 		            SoapEnvelope.VER11);
