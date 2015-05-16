@@ -21,6 +21,7 @@ public class BasicConnector {
 			String SOAP_ACTION = Config.BASE_URL + Config.REGISTRAR;
 			String URL = "http://customcare.outsystemscloud.com/Zelum/WSGeoWiFi.asmx";
 			
+			/*
 			//Add the property to request object
 			PropertyInfo Login = new PropertyInfo();
 			PropertyInfo Email = new PropertyInfo();
@@ -46,20 +47,22 @@ public class BasicConnector {
 		    request.addProperty(Email);
 		    request.addProperty(Senha);
 		    request.addProperty(NomePais);
-			
+			*/
 			
 			
 		    //Add the property to request object
-		    /*
 		    request.addProperty("Login",login);
 		    request.addProperty("Email",email);
 		    request.addProperty("Senha",senha);
 		    request.addProperty("NomePais",nomepais);
-		    */
+		    
+			
 			//Create envelope
 		    SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 		            SoapEnvelope.VER11);
 		    envelope.dotNet = true;
+		    envelope.setAddAdornments(false);
+		    envelope.implicitTypes = true;
 		    
 		    //Set output SOAP object
 		    envelope.setOutputSoapObject(request);
@@ -70,7 +73,10 @@ public class BasicConnector {
 		    //Invoke web service
 	        try {
 	        	androidHttpTransport.setXmlVersionTag("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+	        	androidHttpTransport.debug = true;
 				androidHttpTransport.call(SOAP_ACTION, envelope);
+				Log.d("dump Request: " ,androidHttpTransport.requestDump);
+				Log.d("dump response: " ,androidHttpTransport.responseDump);
 				//Get the response
 		        response = (SoapObject) envelope.bodyIn;
 		        
