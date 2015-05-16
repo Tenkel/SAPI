@@ -38,6 +38,7 @@ public class BasicConnector {
 			
 		    //Invoke web service
 	        try {
+	        	androidHttpTransport.setXmlVersionTag("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 				androidHttpTransport.call(SOAP_ACTION, envelope);
 				//Get the response
 		        response = (SoapObject) envelope.bodyIn;
