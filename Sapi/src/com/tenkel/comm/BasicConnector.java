@@ -58,7 +58,7 @@ public class BasicConnector {
 		    
 			
 			//Create envelope
-		    SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+		    mySoapEnvelope envelope = new mySoapEnvelope(
 		            SoapEnvelope.VER11);
 		    envelope.dotNet = true;
 		    envelope.setAddAdornments(false);
