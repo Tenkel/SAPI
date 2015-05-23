@@ -49,9 +49,15 @@ public class BasicConnector {
 		        
 			} catch (Exception e) {
 				e.printStackTrace();
-				Log.i("BasicConnector", response.getProperty(1).toString());
+				Log.i("BasicConnector", "Erro no SOAP");
 			}
-	        return response;
+	        if (Integer.parseInt(response.getProperty(0).toString())!=0){
+	        	Log.i("BasicConnector", response.getProperty(1).toString());
+	        	return null;
+	        }
+	        else{
+	        	return response;
+	        	}
 		    
 		    	}
 }
