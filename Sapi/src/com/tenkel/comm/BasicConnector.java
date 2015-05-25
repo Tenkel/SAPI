@@ -3,14 +3,13 @@ package com.tenkel.comm;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.transport.HttpTransportSE;
-
 import android.util.Log;
 
 public class BasicConnector {
 	
+	
 	public static SoapObject registrarDispositivo(String login, String email, String senha, String nomepais) throws CommunicationException {
 		Log.i("BasicConnector", "Sending Dispositivo");
-		
 		SoapObject response = null;
 		
 			//Create request	

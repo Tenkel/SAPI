@@ -57,7 +57,7 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
         mBtRegistrar.setOnClickListener(this);
 
         mSharedPrefManager = new SharedPrefManager(getActivity(), true);
-        if (mSharedPrefManager.getUserID() == -1)
+        if (mSharedPrefManager.geToken()==null)
         	showUnregisteredFrame(view);
         else
         	showRegisteredFrame(view);

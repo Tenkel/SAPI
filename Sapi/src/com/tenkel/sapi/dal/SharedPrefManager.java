@@ -27,6 +27,10 @@ public class SharedPrefManager {
 		return mPref.getString(IMEI, Dispositivo.getImei(context));
 	}
 	
+	public String geToken() {
+		return mPref.getString(TOKEN, null);
+	}
+	
 	public void setImei(String imei) {
 		if (mEditPref == null) throw new IllegalStateException(
 				"SharedPrefManager is open as read only");
