@@ -112,7 +112,7 @@ public class DataManager extends SQLiteOpenHelper {
 		  + Andar.NOME + " TEXT, "
 		  + Andar.URIMAPA + " TEXT, "
 		  + Andar.CAMADAS + " TEXT, "
-		  + Andar.IDREMOTO + " INTEGER, "
+		  + Andar.IDREMOTO + " INTEGER UNIQUE, "
 		  + Andar.X1 + " REAL, "
 		  + Andar.Y1 + " REAL, "
 	  	  + Andar.X2 + " REAL, "
