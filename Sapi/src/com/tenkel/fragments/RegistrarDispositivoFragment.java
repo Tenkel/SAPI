@@ -63,7 +63,7 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
         mFdSenha = (EditText) view.findViewById(R.id.fdSenha);
         mBtRegistrar = (Button) view.findViewById(R.id.btRegistrar);
         mBtRegistrar.setOnClickListener(this);
-
+        mAndarManager = new AndarManager(getActivity());
         mSharedPrefManager = new SharedPrefManager(getActivity(), true);
         if (mSharedPrefManager.getToken()==null)
         	showUnregisteredFrame(view);
