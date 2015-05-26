@@ -236,7 +236,7 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 				for (int i=0 ; i<andares.getPropertyCount() ; i++){
 					SoapObject andar = (SoapObject) andares.getProperty(i);
 					mAndar = new Andar(null, andar.getProperty(1).toString(), "", "");
-					mAndar.setIdRemoto(Long.parseLong(andar.getProperty(1).toString()));
+					mAndar.setIdRemoto(Long.parseLong(andar.getProperty(0).toString()));
 					mAndarManager.save(mAndar);
 				}
 				//Log.i("FragmentRegistrar", "Device is now registered with id " + response.getProperty(3).toString());
