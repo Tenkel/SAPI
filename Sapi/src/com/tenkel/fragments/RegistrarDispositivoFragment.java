@@ -232,7 +232,7 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 				Thread.sleep(500);
 				SoapObject response = BasicConnector.registrarAndar(mToken, mUserId, mMarcaId);
 				Andar mAndar;
-				SoapObject andares = (SoapObject) response.getProperty(2);
+				SoapObject andares = (SoapObject) response.getProperty(3);
 				for (int i=0 ; i<andares.getPropertyCount() ; i++){
 					SoapObject andar = (SoapObject) andares.getProperty(i);
 					mAndar = new Andar(null, andar.getProperty(1).toString(), "", "");
