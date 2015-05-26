@@ -102,7 +102,7 @@ public class DataManager extends SQLiteOpenHelper {
 				+ Local.POSICAOGLOBALLAT1 + " REAL, "
 				+ Local.POSICAOGLOBALLONG0 + " REAL, "
 				+ Local.POSICAOGLOBALLONG1 + " REAL, "
-				+ Local.IDREMOTO + " INTEGER);");
+				+ Local.IDREMOTO + " INTEGER UNIQUE);");
 
 		
 		//Table `Andar`
