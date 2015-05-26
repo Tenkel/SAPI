@@ -53,10 +53,10 @@ public class SharedPrefManager {
 		mEditPref.putLong(ID_PAIS, id);
 	}
 	
-	public void setUserID(long id) {
+	public void setUserID(int id) {
 		if (mEditPref == null) throw new IllegalStateException(
 				"SharedPrefManager is open as read only");
-		mEditPref.putLong(ID_USER, id);
+		mEditPref.putInt(ID_USER, id);
 	}
 	
 	public void setToken(String token) {
@@ -76,8 +76,8 @@ public class SharedPrefManager {
 		return mPref.getString(ANDROIDID, Dispositivo.getAndroidID(context));
 	}
 
-	public long getUserID() {
-		return mPref.getLong(ID_USER, -1);
+	public int getUserID() {
+		return mPref.getInt(ID_USER, -1);
 	}
 
 	public void setDT(String tempoinicio) {

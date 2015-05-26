@@ -1,10 +1,11 @@
 package com.tenkel.fragments;
 
 import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapPrimitive;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +23,6 @@ import com.tenkel.sapi.R;
 import com.tenkel.sapi.R.layout;
 import com.tenkel.sapi.dal.SharedPrefManager;
 
-import br.ufrj.cos.labia.aips.dto.DispositivoDTO;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog.Listener;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog.Worker;
@@ -44,6 +44,10 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 	private SharedPrefManager mSharedPrefManager;
 
 	private Button mBtDesvincular;
+	
+	private int Entities[] = null;
+	
+	private String names[] = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,8 +98,16 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 			dialog.setWorker(new RegistrarWorker(login, email, senha, "Brasil"));
 			dialog.setListener(this);
 			dialog.show(getFragmentManager(), "registrando");
+			
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		    builder.setTitle(R.string.escshop)
+		           .setItems(names, new DialogInterface.OnClickListener() {
+		               public void onClick(DialogInterface dialog, int which) {
+		            	   SoapObject response = BasicConnector.registrarAndar(mSharedPrefManager.geToken(), mSharedPrefManager.getUserID(), which);
+		           }
+		    });
 		} else {
-			mSharedPrefManager.setUserID(-1);
+			mSharedPrefManager.setToken(null);
 			mSharedPrefManager.save();
 			showUnregisteredFrame(getView());
 
@@ -160,11 +172,17 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 				Thread.sleep(500);
 				SoapObject response = BasicConnector.registrarDispositivo(mLogin, mEmail, mSenha, mNomePais);
 				mSharedPrefManager.setPaisID(Long.parseLong(response.getProperty(2).toString()));
-				mSharedPrefManager.setUserID(Long.parseLong(response.getProperty(3).toString()));
+				mSharedPrefManager.setUserID(Integer.parseInt(response.getProperty(3).toString()));
 				mSharedPrefManager.setToken(response.getProperty(4).toString());
 				mSharedPrefManager.setDT(response.getProperty(5).toString());
 				mSharedPrefManager.save();
-				Log.i("FragmentRegistrar", "Device is now registered with id " + response.getProperty(3).toString());
+				SoapObject shoppings = (SoapObject) response.getProperty(6);
+				for (int i=0 ; i<shoppings.getPropertyCount() ; i++){
+					SoapObject shopping = (SoapObject) shoppings.getProperty(i);
+					Entities[i] = Integer.parseInt(shopping.getProperty(0).toString());
+					names[i] = shopping.getProperty(0).toString();
+				}
+				//Log.i("FragmentRegistrar", "Device is now registered with id " + response.getProperty(3).toString());
 			} catch (InterruptedException e) {
 				Log.e("FragmentRegistrarTelefone", "Operação interrompida");
 				e.printStackTrace();
