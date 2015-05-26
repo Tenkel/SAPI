@@ -61,7 +61,7 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
         mBtRegistrar.setOnClickListener(this);
 
         mSharedPrefManager = new SharedPrefManager(getActivity(), true);
-        if (mSharedPrefManager.geToken()==null)
+        if (mSharedPrefManager.getToken()==null)
         	showUnregisteredFrame(view);
         else
         	showRegisteredFrame(view);
@@ -123,7 +123,7 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 	    builder.setTitle(R.string.escshop)
 	           .setItems(names, new DialogInterface.OnClickListener() {
 	               public void onClick(DialogInterface dialog, int which) {
-	            	   SoapObject response = BasicConnector.registrarAndar(mSharedPrefManager.geToken(), mSharedPrefManager.getUserID(), which);
+	            	   SoapObject response = BasicConnector.registrarAndar(mSharedPrefManager.getToken(), mSharedPrefManager.getUserID(), which);
 	           }
 	    });
 	    builder.create();
@@ -184,7 +184,7 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 				for (int i=0 ; i<shoppings.getPropertyCount() ; i++){
 					SoapObject shopping = (SoapObject) shoppings.getProperty(i);
 					Entities[i] = Integer.parseInt(shopping.getProperty(0).toString());
-					names[i] = shopping.getProperty(0).toString();
+					names[i] = shopping.getProperty(1).toString();
 				}
 				//Log.i("FragmentRegistrar", "Device is now registered with id " + response.getProperty(3).toString());
 			} catch (InterruptedException e) {

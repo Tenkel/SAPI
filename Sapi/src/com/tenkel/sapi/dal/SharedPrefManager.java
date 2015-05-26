@@ -27,7 +27,7 @@ public class SharedPrefManager {
 		return mPref.getString(IMEI, Dispositivo.getImei(context));
 	}
 	
-	public String geToken() {
+	public String getToken() {
 		return mPref.getString(TOKEN, null);
 	}
 	
