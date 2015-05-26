@@ -87,8 +87,8 @@ public class BasicConnector {
         	androidHttpTransport.setXmlVersionTag("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
         	androidHttpTransport.debug = true;
 			androidHttpTransport.call(SOAP_ACTION, envelope);
-//			Log.d("dump Request: " ,androidHttpTransport.requestDump);
-//			Log.d("dump response: " ,androidHttpTransport.responseDump);
+			Log.d("dump Request: " ,androidHttpTransport.requestDump);
+			Log.d("dump response: " ,androidHttpTransport.responseDump);
 			//Get the response
 	        response = (SoapObject) envelope.bodyIn;
 	        

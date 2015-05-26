@@ -123,7 +123,11 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 	    builder.setTitle(R.string.escshop)
 	           .setItems(names, new DialogInterface.OnClickListener() {
 	               public void onClick(DialogInterface dialog, int which) {
-	            	   SoapObject response = BasicConnector.registrarAndar(mSharedPrefManager.getToken(), mSharedPrefManager.getUserID(), which);
+
+	       			LoadingDialog dialog2 = new LoadingDialog();
+	       			dialog2.setWorker(new AndarWorker(mSharedPrefManager.getToken(), mSharedPrefManager.getUserID(), which));
+	       			dialog2.setListener(this);
+	       			dialog2.show(getFragmentManager(), "registrando");
 	           }
 	    });
 	    builder.create();
@@ -186,6 +190,35 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 					Entities[i] = Integer.parseInt(shopping.getProperty(0).toString());
 					names[i] = shopping.getProperty(1).toString();
 				}
+				//Log.i("FragmentRegistrar", "Device is now registered with id " + response.getProperty(3).toString());
+			} catch (InterruptedException e) {
+				Log.e("FragmentRegistrarTelefone", "Operação interrompida");
+				e.printStackTrace();
+			} catch (CommunicationException e) {
+				e.printStackTrace();
+				throw e;
+			}
+		}
+		
+	}
+	
+	class AndarWorker implements Worker {
+		
+		private String mToken;
+		private int mUserId;
+		private int mMarcaId;
+		
+		public AndarWorker(String token, int UserId, int MarcaId) {
+			mToken = token;
+			mUserId = UserId;
+			mMarcaId = MarcaId;
+		}
+
+		@Override
+		public void doHeavyWork(LoadingDialog dialog) {
+			try {
+				Thread.sleep(500);
+				SoapObject response = BasicConnector.registrarAndar(mToken, mUserId, mMarcaId);
 				//Log.i("FragmentRegistrar", "Device is now registered with id " + response.getProperty(3).toString());
 			} catch (InterruptedException e) {
 				Log.e("FragmentRegistrarTelefone", "Operação interrompida");
