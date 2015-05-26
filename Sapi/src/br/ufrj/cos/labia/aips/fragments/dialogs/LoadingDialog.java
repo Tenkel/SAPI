@@ -12,6 +12,7 @@ public class LoadingDialog extends DialogFragment {
 
 	public interface Worker {
 		void doHeavyWork(LoadingDialog dialog);
+		void Finished();
 	}
 
 	public interface Listener {

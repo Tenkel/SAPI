@@ -112,6 +112,12 @@ public class TrainModelActivity extends Activity implements OnPointSelectListene
 								
 							}
 						}
+
+						@Override
+						public void Finished() {
+							// TODO Auto-generated method stub
+							
+						}
 					});
 				dialog.setListener(TrainModelActivity.this);
 				dialog.show(getFragmentManager(), "training");

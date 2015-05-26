@@ -141,6 +141,12 @@ public class Train extends Fragment {
 					public void doHeavyWork(LoadingDialog dialog) {
 						trainModel();
 					}
+
+					@Override
+					public void Finished() {
+						// TODO Auto-generated method stub
+						
+					}
 				})
 				.show(getFragmentManager(), "training_model");
 		}

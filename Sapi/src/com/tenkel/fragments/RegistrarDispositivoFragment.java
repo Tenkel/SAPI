@@ -95,7 +95,7 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 					.getAndroidID(getActivity());
 			*/
 			LoadingDialog dialog = new LoadingDialog();
-			dialog.setWorker(new RegistrarWorker(login, email, senha, "Brasil"));
+			dialog.setWorker(new RegistrarWorker(this,login, email, senha, "Brasil"));
 			dialog.setListener(this);
 			dialog.show(getFragmentManager(), "registrando");
 		} else {
@@ -116,22 +116,8 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 	
 	@Override
 	public void onFinish(Worker w) {
-		Toast.makeText(getActivity(), "Dados enviados", Toast.LENGTH_SHORT).show();
 		showRegisteredFrame(getView());
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-	    builder.setTitle(R.string.escshop)
-	           .setItems(names, new DialogInterface.OnClickListener() {
-	               public void onClick(DialogInterface dialog, int which) {
-
-	       			LoadingDialog dialog2 = new LoadingDialog();
-	       			dialog2.setWorker(new AndarWorker(mSharedPrefManager.getToken(), mSharedPrefManager.getUserID(), which));
-	       			dialog2.setListener(this);
-	       			dialog2.show(getFragmentManager(), "registrando");
-	           }
-	    });
-	    builder.create();
-	    builder.show();
+		w.Finished();
 		
 		NavigationDrawerFragment drawer = (NavigationDrawerFragment) 
 				getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -164,12 +150,14 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 		private String mEmail;
 		private String mSenha;
 		private String mNomePais;
+		private Listener mListener;
 		
-		public RegistrarWorker(String login, String email, String senha, String nomepais) {
+		public RegistrarWorker(Listener listener, String login, String email, String senha, String nomepais) {
 			mLogin = login;
 			mEmail = email;
 			mSenha = senha;
 			mNomePais = nomepais;
+			mListener = listener;
 		}
 
 		@Override
@@ -199,6 +187,26 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 				throw e;
 			}
 		}
+
+		@Override
+		public void Finished() {
+			Toast.makeText(getActivity(), "Dados enviados", Toast.LENGTH_SHORT).show();
+			
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		    builder.setTitle(R.string.escshop)
+		           .setItems(names, new DialogInterface.OnClickListener() {
+		               public void onClick(DialogInterface dialog, int which) {
+
+		       			LoadingDialog dialog2 = new LoadingDialog();
+		       			dialog2.setWorker(new AndarWorker(mSharedPrefManager.getToken(), mSharedPrefManager.getUserID(), which));
+		       			dialog2.setListener(mListener);
+		       			dialog2.show(getFragmentManager(), "registrando");
+		           }
+		    });
+		    builder.create();
+		    builder.show();
+			
+		}
 		
 	}
 	
@@ -227,6 +235,12 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 				e.printStackTrace();
 				throw e;
 			}
+		}
+
+		@Override
+		public void Finished() {
+			// TODO Auto-generated method stub
+			
 		}
 		
 	}
