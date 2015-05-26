@@ -98,14 +98,6 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 			dialog.setWorker(new RegistrarWorker(login, email, senha, "Brasil"));
 			dialog.setListener(this);
 			dialog.show(getFragmentManager(), "registrando");
-			
-			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		    builder.setTitle(R.string.escshop)
-		           .setItems(names, new DialogInterface.OnClickListener() {
-		               public void onClick(DialogInterface dialog, int which) {
-		            	   SoapObject response = BasicConnector.registrarAndar(mSharedPrefManager.geToken(), mSharedPrefManager.getUserID(), which);
-		           }
-		    });
 		} else {
 			mSharedPrefManager.setToken(null);
 			mSharedPrefManager.save();
@@ -126,6 +118,16 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 	public void onFinish(Worker w) {
 		Toast.makeText(getActivity(), "Dados enviados", Toast.LENGTH_SHORT).show();
 		showRegisteredFrame(getView());
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	    builder.setTitle(R.string.escshop)
+	           .setItems(names, new DialogInterface.OnClickListener() {
+	               public void onClick(DialogInterface dialog, int which) {
+	            	   SoapObject response = BasicConnector.registrarAndar(mSharedPrefManager.geToken(), mSharedPrefManager.getUserID(), which);
+	           }
+	    });
+	    builder.create();
+	    builder.show();
 		
 		NavigationDrawerFragment drawer = (NavigationDrawerFragment) 
 				getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -177,6 +179,8 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 				mSharedPrefManager.setDT(response.getProperty(5).toString());
 				mSharedPrefManager.save();
 				SoapObject shoppings = (SoapObject) response.getProperty(6);
+				Entities = new int[shoppings.getPropertyCount()];
+				names = new String[shoppings.getPropertyCount()];
 				for (int i=0 ; i<shoppings.getPropertyCount() ; i++){
 					SoapObject shopping = (SoapObject) shoppings.getProperty(i);
 					Entities[i] = Integer.parseInt(shopping.getProperty(0).toString());
