@@ -12,8 +12,8 @@ public class SharedPrefManager {
 	private static final String ANDROIDID = "Android_ID";
 	private static final String ID_PAIS = "idPais";
 	private static final String ID_USER = "idUser";
-	private static final String TOKEN = null;
-	private static final String DATE_TIME  = null;
+	private static final String TOKEN = "Token";
+	private static final String DATE_TIME  = "dateTime";
 	
 	private SharedPreferences mPref;
 	private Editor mEditPref;

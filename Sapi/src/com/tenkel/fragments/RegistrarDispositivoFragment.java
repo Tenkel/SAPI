@@ -21,6 +21,8 @@ import com.tenkel.comm.CommunicationException;
 import com.tenkel.sapi.NavigationDrawerFragment;
 import com.tenkel.sapi.R;
 import com.tenkel.sapi.R.layout;
+import com.tenkel.sapi.dal.Andar;
+import com.tenkel.sapi.dal.AndarManager;
 import com.tenkel.sapi.dal.SharedPrefManager;
 
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog;
@@ -48,6 +50,8 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 	private int Entities[] = null;
 	
 	private String names[] = null;
+	
+	private AndarManager mAndarManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -198,7 +202,7 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 		               public void onClick(DialogInterface dialog, int which) {
 
 		       			LoadingDialog dialog2 = new LoadingDialog();
-		       			dialog2.setWorker(new AndarWorker(mSharedPrefManager.getToken(), mSharedPrefManager.getUserID(), which));
+		       			dialog2.setWorker(new AndarWorker(mSharedPrefManager.getToken(), mSharedPrefManager.getUserID(), Entities[which]));
 		       			dialog2.setListener(mListener);
 		       			dialog2.show(getFragmentManager(), "registrando");
 		           }
@@ -227,6 +231,14 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 			try {
 				Thread.sleep(500);
 				SoapObject response = BasicConnector.registrarAndar(mToken, mUserId, mMarcaId);
+				Andar mAndar;
+				SoapObject andares = (SoapObject) response.getProperty(2);
+				for (int i=0 ; i<andares.getPropertyCount() ; i++){
+					SoapObject andar = (SoapObject) andares.getProperty(i);
+					mAndar = new Andar(null, andar.getProperty(1).toString(), "", "");
+					mAndar.setIdRemoto(Long.parseLong(andar.getProperty(1).toString()));
+					mAndarManager.save(mAndar);
+				}
 				//Log.i("FragmentRegistrar", "Device is now registered with id " + response.getProperty(3).toString());
 			} catch (InterruptedException e) {
 				Log.e("FragmentRegistrarTelefone", "Operação interrompida");
