@@ -23,6 +23,8 @@ import com.tenkel.sapi.R;
 import com.tenkel.sapi.R.layout;
 import com.tenkel.sapi.dal.Andar;
 import com.tenkel.sapi.dal.AndarManager;
+import com.tenkel.sapi.dal.Posicao;
+import com.tenkel.sapi.dal.PosicaoManager;
 import com.tenkel.sapi.dal.SharedPrefManager;
 
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog;
@@ -52,6 +54,8 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 	private String names[] = null;
 	
 	private AndarManager mAndarManager;
+	
+	private PosicaoManager mPosicaoManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -229,17 +233,35 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 		@Override
 		public void doHeavyWork(LoadingDialog dialog) {
 			try {
+				int AndaresId[];
 				Thread.sleep(500);
 				SoapObject response = BasicConnector.registrarAndar(mToken, mUserId, mMarcaId);
 				Andar mAndar;
 				SoapObject andares = (SoapObject) response.getProperty(3);
 				for (int i=0 ; i<andares.getPropertyCount() ; i++){
 					SoapObject andar = (SoapObject) andares.getProperty(i);
-					mAndar = new Andar(null, andar.getProperty(1).toString(), "", "");
+					SoapObject response2 = BasicConnector.ListarPI(mToken, mUserId, mMarcaId, Integer.parseInt(andar.getProperty(0).toString()));
+					mAndar = new Andar();
+					mAndar.setNome(andar.getProperty(1).toString());
 					mAndar.setIdRemoto(Long.parseLong(andar.getProperty(0).toString()));
 					mAndarManager.save(mAndar);
+					SoapObject PontosDeInteresse = (SoapObject) response2.getProperty(3);
+					for (int j=0; j<PontosDeInteresse.getPropertyCount();j++){
+						SoapObject PontoDeInteresse = (SoapObject) PontosDeInteresse.getProperty(i);
+						Posicao mPosicao;
+						mPosicao = new Posicao();
+						mPosicao.setIdAndar(mAndar.getIdRemoto());
+						mPosicao.setIdRemoto(Long.parseLong(PontoDeInteresse.getProperty(6).toString()));
+						mPosicao.setReferencia(PontoDeInteresse.getProperty(3).toString());
+						mPosicao.setNome(PontoDeInteresse.getProperty(0).toString());
+						mPosicao.setPropaganda(PontoDeInteresse.getProperty(5).toString());
+						mPosicao.setX(Double.parseDouble(PontoDeInteresse.getProperty(1).toString()));
+						mPosicao.setY(Double.parseDouble(PontoDeInteresse.getProperty(2).toString()));
+						mPosicao.setAtivo(Boolean.parseBoolean(PontoDeInteresse.getProperty(4).toString()));
+						mPosicaoManager.save(mPosicao);
+						mPosicaoManager.update(mPosicao);
+					}
 				}
-				//Log.i("FragmentRegistrar", "Device is now registered with id " + response.getProperty(3).toString());
 			} catch (InterruptedException e) {
 				Log.e("FragmentRegistrarTelefone", "Operação interrompida");
 				e.printStackTrace();

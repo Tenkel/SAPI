@@ -209,7 +209,11 @@ public class BasicConnector {
         else{
         	return response;
         	}
-		
+		/*
+		 * Para pegar ID do ponto de interesse:
+		 * Integer.parseInt(response.getProperty(3).toStrin())
+		 * 
+		 * 	 */
 	}
 	
 }
