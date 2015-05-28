@@ -36,7 +36,8 @@
                     android:layout_height="25dp"
                     android:layout_margin="2dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_action_new" />
+                    android:src="@drawable/ic_action_new"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -131,6 +132,29 @@
             android:ems="8" >
         </EditText>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_columnSpan="2"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:background="@color/black" />
+        
+         <TextView
+            android:id="@+id/textViewPosicao"
+            android:layout_gravity="start"
+            android:text="Local"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/posicaonome"
+            android:layout_gravity="end"
+            android:inputType="textCapWords"
+            android:imeOptions="actionDone"
+            android:ems="8" >
+        </EditText>
+        
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

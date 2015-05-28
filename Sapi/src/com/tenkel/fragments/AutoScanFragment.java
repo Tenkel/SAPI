@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.TreeMap;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
@@ -87,6 +89,7 @@ public class AutoScanFragment extends Fragment {
 	private ImageButton addposicao;
 	
 	private EditText andarnome;
+	private EditText posicaonome;
 	
 	private TextView aquisicoes;
 	private int naquisicoes;
@@ -117,6 +120,7 @@ public class AutoScanFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		naquisicoes = 0;
+		actual_posicao = null;
         View view = inflater.inflate(R.layout.fragment_autoscan, container, false);
 
 		// Managers
@@ -138,6 +142,7 @@ public class AutoScanFragment extends Fragment {
 		addandar = (ImageButton) view.findViewById(R.id.addAndar);
 		addposicao = (ImageButton) view.findViewById(R.id.addPosicao);
 		andarnome = (EditText) view.findViewById(R.id.andarnome);
+		posicaonome = (EditText) view.findViewById(R.id.posicaonome);
 		
 		imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		
@@ -189,9 +194,16 @@ public class AutoScanFragment extends Fragment {
 
 			int nroom;
 			mPosicoes = mPosicaoManager.getByidAndar(actual_andar.getId());
-			actual_posicao = mPosicoes.get((nroom = mPosicoes.size())-1);
-			Room.setMaxValue(nroom);
-			Room.setValue(nroom);
+			if (mPosicoes.size() > 0){
+				actual_posicao = mPosicoes.get((nroom = mPosicoes.size())-1);
+				Room.setMaxValue(nroom);
+				Room.setValue(nroom);
+			}
+			else{
+				Room.setMaxValue(0);
+				Room.setValue(0);
+			}
+			
 		}
 
 		andar.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
@@ -200,9 +212,15 @@ public class AutoScanFragment extends Fragment {
 				actual_andar = mAndares.get(newVal-1);
 				mPosicoes = mPosicaoManager.getByidAndar(actual_andar.getId());
 				int nroom;
-				actual_posicao = mPosicoes.get((nroom = mPosicoes.size())-1);
-				Room.setMaxValue(nroom);
-				Room.setValue(nroom);
+				if (mPosicoes.size() > 0){
+					actual_posicao = mPosicoes.get((nroom = mPosicoes.size())-1);
+					Room.setMaxValue(nroom);
+					Room.setValue(nroom);
+				}
+				else{
+					Room.setMaxValue(0);
+					Room.setValue(0);
+				}
 				andarnome.setText(actual_andar.getNome());
 				FillActualData();
 			}
@@ -302,6 +320,47 @@ public class AutoScanFragment extends Fragment {
         return view;
 	}
 	
+	private void actual_posicaoDialog(){
+		actual_posicao = new Posicao();
+		
+		final EditText input = new EditText(getActivity());
+		
+		new AlertDialog.Builder(getActivity())
+			.setTitle("Nome do local")
+			.setMessage("Insira um nome para o local:")
+			.setView(input)
+			.setPositiveButton("OK"	, new DialogInterface.OnClickListener() {
+			    public void onClick(DialogInterface dialog, int whichButton) {
+			        actual_posicao.setNome(input.getText().toString());
+			      }
+			    })
+		    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			      public void onClick(DialogInterface dialog, int whichButton) {
+			    	  actual_posicao.setNome("S/N");
+			      }
+			    })
+		    .show(); 
+
+		new AlertDialog.Builder(getActivity())
+			.setTitle("Referência do local")
+			.setMessage("Insira uma referência para o local:")
+			.setView(input)
+			.setPositiveButton("OK"	, new DialogInterface.OnClickListener() {
+			    public void onClick(DialogInterface dialog, int whichButton) {
+			    	actual_posicao.setReferencia(input.getText().toString());
+			      }
+			    })
+		    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			      public void onClick(DialogInterface dialog, int whichButton) {
+			    	  actual_posicao.setReferencia("Sem Referência.");
+			      }
+			    })
+		    .show(); 
+		
+		
+		
+	}
+	
 	private void FillActualData(){
 		if((nmaxpower = mLeituraWIFIManager.getMaxValueByidPosicao(actual_posicao.getId())) == 0){
 			maxpower.setText("N/A");
@@ -309,6 +368,10 @@ public class AutoScanFragment extends Fragment {
 			}
 		else
 			maxpower.setText(String.valueOf(nmaxpower = mLeituraWIFIManager.getMaxValueByidPosicao(actual_posicao.getId())));
+		
+		if(actual_posicao != null)
+			posicaonome.setText(actual_posicao.getNome());
+		
 		naps.setText(String.valueOf(nnaps = mAccessPointManager.getByFuncaoPosicaoIdPosicao(actual_posicao.getId()).size()));
 		aquisicoes.setText(String.valueOf(naquisicoes = mObservacaoManager.getByidPosicao(actual_posicao.getId()).size()));				
 	}
