@@ -362,18 +362,28 @@ public class AutoScanFragment extends Fragment {
 	}
 	
 	private void FillActualData(){
+		if(actual_posicao != null){
+			posicaonome.setText(actual_posicao.getNome());
 		if((nmaxpower = mLeituraWIFIManager.getMaxValueByidPosicao(actual_posicao.getId())) == 0){
 			maxpower.setText("N/A");
 			nmaxpower = Long.MIN_VALUE;
 			}
 		else
 			maxpower.setText(String.valueOf(nmaxpower = mLeituraWIFIManager.getMaxValueByidPosicao(actual_posicao.getId())));
-		
-		if(actual_posicao != null)
-			posicaonome.setText(actual_posicao.getNome());
-		
+
 		naps.setText(String.valueOf(nnaps = mAccessPointManager.getByFuncaoPosicaoIdPosicao(actual_posicao.getId()).size()));
-		aquisicoes.setText(String.valueOf(naquisicoes = mObservacaoManager.getByidPosicao(actual_posicao.getId()).size()));				
+		aquisicoes.setText(String.valueOf(naquisicoes = mObservacaoManager.getByidPosicao(actual_posicao.getId()).size()));	
+		}
+		else{
+			posicaonome.setText("");
+			maxpower.setText("N/A");
+			nmaxpower = Long.MIN_VALUE;
+			naps.setText("0");
+			aquisicoes.setText("0");	
+		}
+		
+		
+					
 	}
 	
 	public class AutoWifiReceiver extends BroadcastReceiver {
