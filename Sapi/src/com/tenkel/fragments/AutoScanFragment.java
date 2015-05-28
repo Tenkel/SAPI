@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.TreeMap;
-
 import org.ksoap2.serialization.SoapObject;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -41,7 +40,6 @@ import br.ufrj.cos.labia.aips.ips.IPS;
 import br.ufrj.cos.labia.aips.ips.Location;
 import br.ufrj.cos.labia.aips.ips.Reading;
 import br.ufrj.cos.labia.aips.ips.WIFISignal;
-
 import com.tenkel.comm.BasicConnector;
 import com.tenkel.comm.CommunicationException;
 import com.tenkel.fragments.RegistrarDispositivoFragment.AndarWorker;
@@ -307,7 +305,6 @@ public class AutoScanFragment extends Fragment implements Listener {
 //				Room.setMaxValue(nroom);
 //				Room.setValue(nroom);
 //				mPosicoes.add(actual_posicao);
-				FillActualData();
 			}
 		});
 		
@@ -334,6 +331,7 @@ public class AutoScanFragment extends Fragment implements Listener {
         return view;
 	}
 	
+	@SuppressLint("NewApi")
 	private void actual_posicaoDialog(){
 		actual_posicao = mPosicaoManager.getEmptyRemote();
 		
@@ -352,43 +350,64 @@ public class AutoScanFragment extends Fragment implements Listener {
 			      public void onClick(DialogInterface dialog, int whichButton) {
 			    	  actual_posicao.setNome("S/N");
 			      }
-			    })
-		    .show(); 
+			    }).setOnDismissListener(new DialogInterface.OnDismissListener() {
+					
+					@Override
+					public void onDismiss(DialogInterface dialog) { 
 
-		new AlertDialog.Builder(getActivity())
-			.setTitle("Referência do local")
-			.setMessage("Insira uma referência para o local:")
-			.setView(input)
-			.setPositiveButton("OK"	, new DialogInterface.OnClickListener() {
-			    public void onClick(DialogInterface dialog, int whichButton) {
-			    	actual_posicao.setReferencia(input.getText().toString());
-			      }
-			    })
-		    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			      public void onClick(DialogInterface dialog, int whichButton) {
-			    	  actual_posicao.setReferencia("Sem Referência.");
-			      }
-			    })
-		    .show(); 
-		
-		actual_posicao.setX(actual_posicao.getId().doubleValue()); 
-		actual_posicao.setY(actual_posicao.getId().doubleValue()); 
-		
-		LoadingDialog dialog = new LoadingDialog();
-		dialog.setWorker(new DefinirPIWorker(this,mSharedPrefManager.getToken(), 
-												mSharedPrefManager.getUserID(), 
-												actual_andar.getIdRemoto().intValue(), 
-												actual_posicao.getNome(), 
-												actual_posicao.getX().intValue(), 
-												actual_posicao.getY().intValue(), 
-												actual_posicao.getReferencia(), 
-												actual_posicao.getIdRemoto().intValue()));
-		dialog.setListener(this);
-		dialog.show(getFragmentManager(), "registrando");
-		mPosicaoManager.save(actual_posicao);
-		Room.setMaxValue(mPosicoes.size()+1);
-		Room.setValue(mPosicoes.size()+1);
-		mPosicoes.add(actual_posicao);
+						final EditText inputRef = new EditText(getActivity());
+						
+						new AlertDialog.Builder(getActivity())
+							.setTitle("Referência do local")
+							.setMessage("Insira uma referência para o local:")
+							.setView(inputRef)
+							.setPositiveButton("OK"	, new DialogInterface.OnClickListener() {
+							    public void onClick(DialogInterface dialog, int whichButton) {
+							    	actual_posicao.setReferencia(inputRef.getText().toString());
+							      }
+							    })
+						    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+							      public void onClick(DialogInterface dialog, int whichButton) {
+							    	  actual_posicao.setReferencia("Sem Referência.");
+							      }
+							    }).setOnDismissListener(new DialogInterface.OnDismissListener() {
+									
+									@Override
+									public void onDismiss(DialogInterface dialog) {
+
+										
+										actual_posicao.setX(actual_posicao.getIdRemoto().doubleValue()); 
+										actual_posicao.setY(actual_posicao.getIdRemoto().doubleValue()); 
+										
+										LoadingDialog dialog1 = new LoadingDialog();
+										dialog1.setWorker(new DefinirPIWorker(AutoScanFragment.this,mSharedPrefManager.getToken(), 
+																				mSharedPrefManager.getUserID(), 
+																				actual_andar.getIdRemoto().intValue(), 
+																				actual_posicao.getNome(), 
+																				actual_posicao.getX().intValue(), 
+																				actual_posicao.getY().intValue(), 
+																				actual_posicao.getReferencia(), 
+																				actual_posicao.getIdRemoto().intValue()));
+										dialog1.setListener(AutoScanFragment.this);
+										dialog1.show(getFragmentManager(), "registrando");
+										mPosicaoManager.save(actual_posicao);
+										Room.setMaxValue(mPosicoes.size()+1);
+										Room.setValue(mPosicoes.size()+1);
+										mPosicoes.add(actual_posicao);
+										FillActualData();
+										
+										
+										
+										
+										
+										
+									}
+								})
+						    .show();
+						
+					}
+				})
+		    .show();
 		
 	}
 	

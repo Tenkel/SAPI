@@ -130,7 +130,7 @@ public class PosicaoManager extends DataManager {
 		Cursor c = db.rawQuery("SELECT MAX(" + Posicao.IDREMOTO + ") FROM " + PosicaoTable, null);
 		
 		if(c.moveToFirst())
-			maxremote = c.getLong(4);
+			maxremote = c.getLong(0);
 		
 		Posicao posicao = new Posicao();
 		
