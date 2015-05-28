@@ -298,14 +298,15 @@ public class AutoScanFragment extends Fragment implements Listener {
 			
 			@Override
 			public void onClick(View v) {
-				int nroom;
-				actual_posicao = new Posicao();
-				actual_posicao.setIdAndar(actual_andar.getId());
-				actual_posicao.setIdRemoto((long)(nroom = (mPosicoes.size()+1)));
-				mPosicaoManager.save(actual_posicao);
-				Room.setMaxValue(nroom);
-				Room.setValue(nroom);
-				mPosicoes.add(actual_posicao);
+				actual_posicaoDialog();
+//				int nroom;
+//				actual_posicao = new Posicao();
+//				actual_posicao.setIdAndar(actual_andar.getId());
+//				actual_posicao.setIdRemoto((long)(nroom = (mPosicoes.size()+1)));
+//				mPosicaoManager.save(actual_posicao);
+//				Room.setMaxValue(nroom);
+//				Room.setValue(nroom);
+//				mPosicoes.add(actual_posicao);
 				FillActualData();
 			}
 		});
@@ -334,7 +335,7 @@ public class AutoScanFragment extends Fragment implements Listener {
 	}
 	
 	private void actual_posicaoDialog(){
-		actual_posicao = new Posicao();
+		actual_posicao = mPosicaoManager.getEmptyRemote();
 		
 		final EditText input = new EditText(getActivity());
 		
@@ -370,10 +371,24 @@ public class AutoScanFragment extends Fragment implements Listener {
 			    })
 		    .show(); 
 		
+		actual_posicao.setX(actual_posicao.getId().doubleValue()); 
+		actual_posicao.setY(actual_posicao.getId().doubleValue()); 
+		
 		LoadingDialog dialog = new LoadingDialog();
-		dialog.setWorker(new RegistrarWorker(this,mSharedPrefManager.getToken(), mSharedPrefManager.getUserID(), andar, nome, (int)x,(int) y, referencia, (int) IdHandset));
+		dialog.setWorker(new DefinirPIWorker(this,mSharedPrefManager.getToken(), 
+												mSharedPrefManager.getUserID(), 
+												actual_andar.getIdRemoto().intValue(), 
+												actual_posicao.getNome(), 
+												actual_posicao.getX().intValue(), 
+												actual_posicao.getY().intValue(), 
+												actual_posicao.getReferencia(), 
+												actual_posicao.getIdRemoto().intValue()));
 		dialog.setListener(this);
 		dialog.show(getFragmentManager(), "registrando");
+		mPosicaoManager.save(actual_posicao);
+		Room.setMaxValue(mPosicoes.size()+1);
+		Room.setValue(mPosicoes.size()+1);
+		mPosicoes.add(actual_posicao);
 		
 	}
 	

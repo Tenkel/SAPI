@@ -121,6 +121,23 @@ public class PosicaoManager extends DataManager {
 		posicao.setAtivo(c.getInt(8)!=0);
 		return posicao;
 	}
+	
+	public Posicao getEmptyRemote(){
+		SQLiteDatabase db = getWritableDatabase();
+		
+		Long maxremote = (long) 0;
+		
+		Cursor c = db.rawQuery("SELECT MAX(" + Posicao.IDREMOTO + ") FROM " + PosicaoTable, null);
+		
+		if(c.moveToFirst())
+			maxremote = c.getLong(4);
+		
+		Posicao posicao = new Posicao();
+		
+		posicao.setIdRemoto(maxremote);
+		
+		return posicao;
+	}
 
 	public void update(Posicao pos) {
 		SQLiteDatabase db = getWritableDatabase();
