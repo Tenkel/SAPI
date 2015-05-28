@@ -115,6 +115,10 @@ public class PosicaoManager extends DataManager {
 		posicao.setY(c.getDouble(2));
 		posicao.setIdAndar(c.getLong(3));
 		posicao.setIdRemoto(c.getLong(4));
+		posicao.setReferencia(c.getString(5));
+		posicao.setNome(c.getString(6));
+		posicao.setPropaganda(c.getString(7));
+		posicao.setAtivo(c.getInt(8)!=0);
 		return posicao;
 	}
 	
@@ -124,6 +128,10 @@ public class PosicaoManager extends DataManager {
 		values.put(Posicao.Y, posicao.getY());
 		values.put(Posicao.IDANDAR, posicao.getIdAndar());
 		values.put(Posicao.IDREMOTO, posicao.getIdRemoto());
+		values.put(Posicao.REFERENCIA, posicao.getReferencia());
+		values.put(Posicao.NOME, posicao.getNome());
+		values.put(Posicao.PROPAGANDA, posicao.getPropaganda());
+		values.put(Posicao.ATIVO, posicao.isAtivo());
 		return values;
 	}
 

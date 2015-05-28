@@ -134,6 +134,8 @@ public class DataManager extends SQLiteOpenHelper {
 				  + Posicao.X + " REAL, "
 				  + Posicao.Y + " REAL, "
 				  + Posicao.IDREMOTO + " INTEGER, "
+			      + Posicao.REFERENCIA + " TEXT, "
+				  + Posicao.NOME + " TEXT, "
 
 				  + "CONSTRAINT " + Posicao.FK_POSICAO_ANDAR +
 				    " FOREIGN KEY (" + Posicao.IDANDAR + ")" +
