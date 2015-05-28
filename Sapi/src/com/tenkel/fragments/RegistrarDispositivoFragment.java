@@ -233,7 +233,6 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 		@Override
 		public void doHeavyWork(LoadingDialog dialog) {
 			try {
-				int AndaresId[];
 				Thread.sleep(500);
 				SoapObject response = BasicConnector.registrarAndar(mToken, mUserId, mMarcaId);
 				Andar mAndar;
