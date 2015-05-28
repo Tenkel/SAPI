@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.TreeMap;
 
+import org.ksoap2.serialization.SoapObject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -32,11 +34,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog;
+import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog.Listener;
+import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog.Worker;
 import br.ufrj.cos.labia.aips.ips.IPS;
 import br.ufrj.cos.labia.aips.ips.Location;
 import br.ufrj.cos.labia.aips.ips.Reading;
 import br.ufrj.cos.labia.aips.ips.WIFISignal;
 
+import com.tenkel.comm.BasicConnector;
+import com.tenkel.comm.CommunicationException;
+import com.tenkel.fragments.RegistrarDispositivoFragment.AndarWorker;
+import com.tenkel.fragments.RegistrarDispositivoFragment.RegistrarWorker;
+import com.tenkel.sapi.NavigationDrawerFragment;
 import com.tenkel.sapi.R;
 import com.tenkel.sapi.dal.AccessPoint;
 import com.tenkel.sapi.dal.AccessPointManager;
@@ -51,8 +61,9 @@ import com.tenkel.sapi.dal.Observacao;
 import com.tenkel.sapi.dal.ObservacaoManager;
 import com.tenkel.sapi.dal.Posicao;
 import com.tenkel.sapi.dal.PosicaoManager;
+import com.tenkel.sapi.dal.SharedPrefManager;
 
-public class AutoScanFragment extends Fragment {
+public class AutoScanFragment extends Fragment implements Listener {
 
 	@Override
 	public void onPause() {
@@ -66,6 +77,7 @@ public class AutoScanFragment extends Fragment {
 		super.onResume();
 	}
 
+	private SharedPrefManager mSharedPrefManager;
 	private AndarManager mAndarManager;
 	private PosicaoManager mPosicaoManager;
 	private ObservacaoManager mObservacaoManager;
@@ -130,6 +142,7 @@ public class AutoScanFragment extends Fragment {
 		mObservacaoManager = new ObservacaoManager(getActivity());
 		mLeituraWIFIManager = new LeituraWifiManager(getActivity());
 		mAccessPointManager = new AccessPointManager(getActivity());
+		mSharedPrefManager = new SharedPrefManager(getActivity(), true);
 
 		LoopBar = (ProgressBar) view.findViewById(R.id.captura_progress);
 		aquisicoes = (TextView) view.findViewById(R.id.aquisicoes);
@@ -357,7 +370,10 @@ public class AutoScanFragment extends Fragment {
 			    })
 		    .show(); 
 		
-		
+		LoadingDialog dialog = new LoadingDialog();
+		dialog.setWorker(new RegistrarWorker(this,mSharedPrefManager.getToken(), mSharedPrefManager.getUserID(), andar, nome, (int)x,(int) y, referencia, (int) IdHandset));
+		dialog.setListener(this);
+		dialog.show(getFragmentManager(), "registrando");
 		
 	}
 	
@@ -449,6 +465,76 @@ public class AutoScanFragment extends Fragment {
 		Posicao p = mPosicoes.get(1);//l.getPointId()
 		return l.getPointId();
 
+	}
+
+	@Override
+	public void onStart(Worker w) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onFinish(Worker w) {
+		w.Finished();
+		
+	}
+
+	@Override
+	public void onError(Worker w, Exception e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onCancel(Worker w) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+class DefinirPIWorker implements Worker {
+		
+		private String mToken;
+		private String mNome;
+		private String mSenha;
+		private int mX;
+		private int mY;
+		private int mUserId;
+		private int mAndar;
+		private String mReferencia;
+		private int mIdHandset;
+		private Listener mListener;
+		
+		public DefinirPIWorker(Listener listener, String token, int userid, int andar, String nome, int x, int y, String referencia, int IdHandset) {
+			mToken = token;
+			mUserId = userid;
+			mAndar = andar;
+			mNome = nome;
+			mX = x;
+			mY = y;
+			mReferencia = referencia;
+			mIdHandset = IdHandset;
+			mListener = listener;
+		}
+
+		@Override
+		public void doHeavyWork(LoadingDialog dialog) {
+			try {
+				Thread.sleep(500);
+				SoapObject response = BasicConnector.DefinirPI(mToken,mUserId,mAndar,mNome,mX,mY,mReferencia,mIdHandset);
+			} catch (InterruptedException e) {
+				Log.e("FragmentRegistrarTelefone", "Operação interrompida");
+				e.printStackTrace();
+			} catch (CommunicationException e) {
+				e.printStackTrace();
+				throw e;
+			}
+		}
+
+		@Override
+		public void Finished() {
+			
+		}
+		
 	}
 
 }
