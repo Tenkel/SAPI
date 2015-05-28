@@ -133,7 +133,7 @@ public class DataManager extends SQLiteOpenHelper {
 				  + Posicao.IDANDAR + " INTEGER, "
 				  + Posicao.X + " REAL, "
 				  + Posicao.Y + " REAL, "
-				  + Posicao.IDREMOTO + " INTEGER, "
+				  + Posicao.IDREMOTO + " INTEGER UNIQUE, "
 			      + Posicao.REFERENCIA + " TEXT, "
 				  + Posicao.NOME + " TEXT, "
 

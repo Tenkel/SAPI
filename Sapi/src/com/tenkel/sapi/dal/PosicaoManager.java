@@ -121,6 +121,20 @@ public class PosicaoManager extends DataManager {
 		posicao.setAtivo(c.getInt(8)!=0);
 		return posicao;
 	}
+
+	public void update(Posicao pos) {
+		SQLiteDatabase db = getWritableDatabase();
+		
+		try {
+			db.execSQL("UPDATE " + PosicaoTable + " SET " + 
+					Posicao.PROPAGANDA + "=" + pos.getPropaganda() + ", " + 
+					Posicao.ATIVO + "=" + pos.isAtivo() + 
+					" WHERE ID=" + pos.getId());
+		} finally {
+			db.close();
+		}
+	}
+
 	
 	private ContentValues buildRecord(Posicao posicao) {
 		ContentValues values = new ContentValues();
