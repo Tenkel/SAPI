@@ -16,7 +16,7 @@ public class PosicaoManager extends DataManager {
 		super(c);
 	}
 	
-	public void save(Posicao posicao) {
+	public boolean save(Posicao posicao) {
 		SQLiteDatabase db = getWritableDatabase();
 
 		try {
@@ -24,6 +24,10 @@ public class PosicaoManager extends DataManager {
 		} finally {
 			db.close();
 		}
+		
+		if(posicao.getId()==-1)
+			return false;
+		return true;
 	}
 
 	public List<Posicao> getByidAndar(long idAndar) {
@@ -33,9 +37,10 @@ public class PosicaoManager extends DataManager {
 		try {
 			Cursor c = db.query(PosicaoTable, Posicao.FIELDS, 
 					Posicao.IDANDAR + "=" + idAndar, null, null, null, null);
-			
-			while (c.moveToNext())
+			if(c.moveToFirst())
+			do
 				list.add(readRecord(c));
+			while (c.moveToNext());
 			
 			c.close();
 		} finally {
@@ -144,9 +149,9 @@ public class PosicaoManager extends DataManager {
 		
 		try {
 			db.execSQL("UPDATE " + PosicaoTable + " SET " + 
-					Posicao.PROPAGANDA + "=" + pos.getPropaganda() + ", " + 
-					Posicao.ATIVO + "=" + pos.isAtivo() + 
-					" WHERE ID=" + pos.getId());
+					Posicao.PROPAGANDA + "= \"" + pos.getPropaganda() + "\", " + 
+					Posicao.ATIVO + "=" + (pos.isAtivo()? 1 : 0) + 
+					" WHERE "+ Posicao.IDREMOTO + "=" + pos.getIdRemoto());
 		} finally {
 			db.close();
 		}
@@ -162,7 +167,7 @@ public class PosicaoManager extends DataManager {
 		values.put(Posicao.REFERENCIA, posicao.getReferencia());
 		values.put(Posicao.NOME, posicao.getNome());
 		values.put(Posicao.PROPAGANDA, posicao.getPropaganda());
-		values.put(Posicao.ATIVO, posicao.isAtivo());
+		values.put(Posicao.ATIVO, posicao.isAtivo() ? 1 : 0);
 		return values;
 	}
 

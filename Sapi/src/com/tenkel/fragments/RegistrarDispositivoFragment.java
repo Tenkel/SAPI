@@ -68,6 +68,7 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
         mBtRegistrar = (Button) view.findViewById(R.id.btRegistrar);
         mBtRegistrar.setOnClickListener(this);
         mAndarManager = new AndarManager(getActivity());
+        mPosicaoManager = new PosicaoManager(getActivity());
         mSharedPrefManager = new SharedPrefManager(getActivity(), true);
         if (mSharedPrefManager.getToken()==null)
         	showUnregisteredFrame(view);
@@ -249,7 +250,7 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 						SoapObject PontoDeInteresse = (SoapObject) PontosDeInteresse.getProperty(i);
 						Posicao mPosicao;
 						mPosicao = new Posicao();
-						mPosicao.setIdAndar(mAndar.getIdRemoto());
+						mPosicao.setIdAndar(mAndar.getId());
 						mPosicao.setIdRemoto(Long.parseLong(PontoDeInteresse.getProperty(6).toString()));
 						mPosicao.setReferencia(PontoDeInteresse.getProperty(3).toString());
 						mPosicao.setNome(PontoDeInteresse.getProperty(0).toString());
@@ -257,8 +258,8 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 						mPosicao.setX(Double.parseDouble(PontoDeInteresse.getProperty(1).toString()));
 						mPosicao.setY(Double.parseDouble(PontoDeInteresse.getProperty(2).toString()));
 						mPosicao.setAtivo(Boolean.parseBoolean(PontoDeInteresse.getProperty(4).toString()));
-						mPosicaoManager.save(mPosicao);
-						mPosicaoManager.update(mPosicao);
+						if(!mPosicaoManager.save(mPosicao))
+							mPosicaoManager.update(mPosicao);
 					}
 				}
 			} catch (InterruptedException e) {

@@ -16,6 +16,7 @@ public class AndarManager extends DataManager {
 
 	public void save(Andar andar) {
 		SQLiteDatabase db = getWritableDatabase();
+		Long id = (long) -1;
 		
 		try {
 			ContentValues values = new ContentValues();
@@ -29,12 +30,41 @@ public class AndarManager extends DataManager {
 			values.put(Andar.X2, andar.getX2());
 			values.put(Andar.Y2, andar.getY2());
 			values.put(Andar.IMAGE, andar.getImage());
-			andar.setId(db.insert(AndarTable, null, values));
+			if((id = db.insert(AndarTable, null, values))==-1)
+				setByIdRemoto(andar, andar.getIdRemoto());
+			else
+				andar.setId(id);
 		} finally {
 			db.close();
 		}
 	}
 	
+	private void setByIdRemoto(Andar andar, Long idRemoto) {
+		SQLiteDatabase db = getReadableDatabase();
+
+		try {
+			String where = Andar.IDREMOTO + "=" + idRemoto;
+			Cursor c = db.query(AndarTable, Andar.FIELDS, where, null, null, null, null);
+			
+			if (c.moveToFirst()) {
+				andar.setId(c.getLong(0));
+				andar.setIdLocal(c.getLong(1));
+				andar.setNome(c.getString(2));
+				andar.setURIMapa(c.getString(3));
+				andar.setCamadas(c.getString(4));
+				andar.setIdRemoto(c.getLong(5));
+				andar.setX1(c.getDouble(6));
+				andar.setY1(c.getDouble(7));
+				andar.setX2(c.getDouble(8));
+				andar.setY2(c.getDouble(9));
+				andar.setImage(c.getBlob(10));
+			}
+			c.close();
+		} finally {
+			db.close();
+		}
+	}
+
 	public List<Andar> getAllWithNullIdLocal() {
 		List<Andar> list = new ArrayList<Andar>();
 		SQLiteDatabase db = getReadableDatabase();
@@ -42,7 +72,7 @@ public class AndarManager extends DataManager {
 		try {
 			String where = Andar.IDLOCAL + " IS NULL";
 			Cursor c = db.query(AndarTable, Andar.FIELDS, where, null, null, null, null);
-			
+			c.moveToFirst();
 			while (c.moveToNext()) {
 				Andar andar = new Andar();
 				andar.setId(c.getLong(0));
