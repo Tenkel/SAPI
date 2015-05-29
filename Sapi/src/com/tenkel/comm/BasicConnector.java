@@ -161,8 +161,8 @@ public class BasicConnector {
 	public static SoapObject DefinirPI(String token, int userid, int andar, String nome, int x, int y, String referencia, int IdHandset) throws CommunicationException {
 		SoapObject response = null;
 		//Create request	
-		SoapObject request = new SoapObject(Config.NAMESPACE, Config.PONTOS_DE_INTERESSE);
-		String SOAP_ACTION = Config.BASE_URL + Config.PONTOS_DE_INTERESSE;
+		SoapObject request = new SoapObject(Config.NAMESPACE, Config.DEFINIR_PONTO_INTERESSE);
+		String SOAP_ACTION = Config.BASE_URL + Config.DEFINIR_PONTO_INTERESSE;
 		
 		//Add the property to request object
 		request.addProperty("Token",token);
