@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_confianca"
+        android:icon="@drawable/ic_action_location_found"
+        android:orderInCategory="1"
+        android:showAsAction="always"
+        android:title="@string/action_confianca_text">
+    </item>
+
+</menu>

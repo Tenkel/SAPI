@@ -26,5 +26,6 @@
     <string name="title_section4">Captura</string>
     <string name="title_section5">Treinamento</string>
     <string name="escshop">Escolha um Shopping</string>
+    <string name="action_confianca_text">Confianca</string>
 
 </resources>
