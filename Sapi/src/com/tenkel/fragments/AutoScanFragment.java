@@ -183,20 +183,19 @@ public class AutoScanFragment extends Fragment implements Listener {
 		int nandar;
 		if ((nandar = mAndares.size()) < 1){
 			actual_andar = new Andar();
-			actual_andar.setNome("Andar Atual");
-			mAndarManager.save(actual_andar);
-			andar.setMaxValue(1);	
-			andar.setValue(1);
-			mAndares.add(actual_andar);
+			actual_andar.setNome("Not Avaiable");
+			//mAndarManager.save(actual_andar);
+			andar.setMaxValue(0);	
+			andar.setValue(0);			
+			//mAndares.add(actual_andar);
 			
-			actual_posicao = new Posicao();
-			actual_posicao.setIdAndar(actual_andar.getId());
-			actual_posicao.setIdRemoto((long) 1);
-			mPosicaoManager.save(actual_posicao);
-			Room.setMaxValue(1);
-			Room.setValue(1);
+			//actual_posicao.setIdAndar(actual_andar.getId());
+			//actual_posicao.setIdRemoto((long) 1);
+			//mPosicaoManager.save(actual_posicao);
+			Room.setMaxValue(0);
+			Room.setValue(0);
 			mPosicoes = new ArrayList<Posicao>();
-			mPosicoes.add(actual_posicao);
+			//mPosicoes.add(actual_posicao);
 		}
 		else{			
 			actual_andar = mAndares.get(nandar-1);
