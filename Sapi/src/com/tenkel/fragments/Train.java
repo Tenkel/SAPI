@@ -101,7 +101,7 @@ public class Train extends Fragment {
 		final NumberPicker input = new NumberPicker(getActivity());
 		input.setMinValue(5);
 		input.setMaxValue(100);
-		input.setValue(20);
+		input.setValue(mSharedPrefManager.getConfianca());
 		
 		
 		AlertDialog dialog = new AlertDialog.Builder(getActivity())
@@ -110,6 +110,7 @@ public class Train extends Fragment {
 			.setView(input)
 			.setPositiveButton("OK"	, new DialogInterface.OnClickListener() {
 			    public void onClick(DialogInterface dialog, int whichButton) {
+			    	mSharedPrefManager.setConfianca(input.getValue());
 			      }
 			    })
 		    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
