@@ -243,9 +243,17 @@ public class Train extends Fragment {
 		
 		else{ 
 			float probability = getProbability(map);
-			guess.setText(String.valueOf(mPosicaoManager.getFirstById(l.getPointId()).getIdRemoto()));
-			confianca.setText(String.valueOf(mIPS.getConfidence()));
-			probabilidade.setText(String.format("%.1f",probability)+"%"); 
+			if (mIPS.getConfidence() >= -mSharedPrefManager.getConfianca())
+			{
+				guess.setText(String.valueOf(mPosicaoManager.getFirstById(l.getPointId()).getIdRemoto()));
+				confianca.setText(String.valueOf(mIPS.getConfidence()));
+				probabilidade.setText(String.format("%.1f",probability)+"%"); 
+			}
+			else{
+				guess.setText("?");
+				confianca.setText(String.valueOf(mIPS.getConfidence()));
+				probabilidade.setText(String.format("%.1f",probability)+"%");
+			}
 		}
 
 		LinkedHashMap<Location, Float> probabilites = getAllProbability(map);
