@@ -14,7 +14,7 @@ public class Posicao{
 	public static final String FK_POSICAO_ANDAR = "fk_Posicao_Andar";
 	public static final String FK_POSICAO_ANDAR_IDX = "fk_Posicao_Andar_idx";
 	
-	public static final String[] FIELDS = new String[] {ID, X, Y, IDANDAR, IDREMOTO,REFERENCIA,NOME};
+	public static final String[] FIELDS = new String[] {ID, X, Y, IDANDAR, IDREMOTO, REFERENCIA, NOME, PROPAGANDA, ATIVO};
 
 	private Long id;
 	private Long idAndar;
