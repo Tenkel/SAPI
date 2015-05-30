@@ -395,15 +395,6 @@ public class AutoScanFragment extends Fragment implements Listener {
 																				actual_posicao.getIdRemoto().intValue()));
 										dialog1.setListener(AutoScanFragment.this);
 										dialog1.show(getFragmentManager(), "registrando");
-										mPosicaoManager.save(actual_posicao);
-										Room.setMaxValue(mPosicoes.size()+1);
-										Room.setValue(mPosicoes.size()+1);
-										mPosicoes.add(actual_posicao);
-										FillActualData();
-										
-										
-										
-										
 										
 										
 									}
@@ -571,7 +562,12 @@ class DefinirPIWorker implements Worker {
 
 		@Override
 		public void Finished() {
-			
+			actual_posicao.setIdAndar(actual_andar.getId());
+			mPosicaoManager.save(actual_posicao);
+			Room.setMaxValue(mPosicoes.size()+1);
+			Room.setValue(mPosicoes.size()+1);
+			mPosicoes.add(actual_posicao);
+			FillActualData();		
 		}
 		
 	}
