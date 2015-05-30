@@ -72,8 +72,9 @@ public class AndarManager extends DataManager {
 		try {
 			String where = Andar.IDLOCAL + " IS NULL";
 			Cursor c = db.query(AndarTable, Andar.FIELDS, where, null, null, null, null);
-			c.moveToFirst();
-			while (c.moveToNext()) {
+			if(c.moveToFirst())
+			do
+			 {
 				Andar andar = new Andar();
 				andar.setId(c.getLong(0));
 				andar.setIdLocal(c.getLong(1));
@@ -88,6 +89,8 @@ public class AndarManager extends DataManager {
 				andar.setImage(c.getBlob(10));
 				list.add(andar);
 			}
+			while (c.moveToNext());
+			
 			c.close();
 		} finally {
 			db.close();
