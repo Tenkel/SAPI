@@ -9,9 +9,11 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
@@ -27,6 +29,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -93,7 +97,29 @@ public class Train extends Fragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
+		
+		final NumberPicker input = new NumberPicker(getActivity());
+		input.setMinValue(5);
+		input.setMaxValue(100);
+		input.setValue(20);
+		
+		
+		AlertDialog dialog = new AlertDialog.Builder(getActivity())
+			.setTitle("Confiança")
+			.setMessage("Escolha o nível necessário de confiança:")
+			.setView(input)
+			.setPositiveButton("OK"	, new DialogInterface.OnClickListener() {
+			    public void onClick(DialogInterface dialog, int whichButton) {
+			      }
+			    })
+		    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			      public void onClick(DialogInterface dialog, int whichButton) {
+			      }
+			    })
+			    .create();
+		
+		dialog.show();
+		
 		return super.onOptionsItemSelected(item);
 	}
 
