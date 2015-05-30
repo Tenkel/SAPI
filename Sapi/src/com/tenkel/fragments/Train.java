@@ -53,6 +53,7 @@ import com.tenkel.sapi.dal.Observacao;
 import com.tenkel.sapi.dal.ObservacaoManager;
 import com.tenkel.sapi.dal.Posicao;
 import com.tenkel.sapi.dal.PosicaoManager;
+import com.tenkel.sapi.dal.SharedPrefManager;
 import com.tenkel.sapi.kde.FoundLocation;
 import com.tenkel.sapi.kde.KDE;
 
@@ -78,6 +79,7 @@ public class Train extends Fragment {
 	private int cycles;
 	private Button Export_BD;
 	private ProgressBar TrainProgress;
+	private SharedPrefManager mSharedPrefManager;
 	
 	public static Fragment newInstance() {
 		return new Train();
@@ -106,7 +108,7 @@ public class Train extends Fragment {
 			Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_train, container, false);
         setHasOptionsMenu(true);
-
+        mSharedPrefManager = new SharedPrefManager(getActivity(), true);
         TrainProgress = (ProgressBar) view.findViewById(R.id.trainProgress);
         aquisicoes = (TextView) view.findViewById(R.id.aqc);
         guess = (TextView) view.findViewById(R.id.chute);

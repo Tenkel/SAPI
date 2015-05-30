@@ -14,6 +14,7 @@ public class SharedPrefManager {
 	private static final String ID_USER = "idUser";
 	private static final String TOKEN = "Token";
 	private static final String DATE_TIME  = "dateTime";
+	private static final String CONFIANCA = "Confianca";
 	
 	private SharedPreferences mPref;
 	private Editor mEditPref;
@@ -85,5 +86,16 @@ public class SharedPrefManager {
 				"SharedPrefManager is open as read only");
 		mEditPref.putString(DATE_TIME, tempoinicio);
 	} 
+	
+	public void setConfianca(float confianca) {
+		if (mEditPref == null) throw new IllegalStateException(
+				"SharedPrefManager is open as read only");
+		mEditPref.putFloat(CONFIANCA, confianca);
+	}
+	
+	public float getConfianca(){
+		return mPref.getFloat(CONFIANCA, 100);
+	}
+	
 	
 }
