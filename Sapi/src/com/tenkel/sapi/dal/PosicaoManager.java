@@ -139,7 +139,7 @@ public class PosicaoManager extends DataManager {
 		
 		Posicao posicao = new Posicao();
 		
-		posicao.setIdRemoto(maxremote);
+		posicao.setIdRemoto(maxremote+1);
 		
 		return posicao;
 	}
