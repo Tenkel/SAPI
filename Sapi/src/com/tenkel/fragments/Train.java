@@ -112,6 +112,7 @@ public class Train extends Fragment {
 			.setPositiveButton("OK"	, new DialogInterface.OnClickListener() {
 			    public void onClick(DialogInterface dialog, int whichButton) {
 			    	mSharedPrefManager.setConfianca(input.getValue());
+			    	mSharedPrefManager.save();
 			      }
 			    })
 		    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
