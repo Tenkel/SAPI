@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.TreeMap;
+
 import org.ksoap2.serialization.SoapObject;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,6 +14,7 @@ import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
@@ -40,6 +43,7 @@ import br.ufrj.cos.labia.aips.ips.IPS;
 import br.ufrj.cos.labia.aips.ips.Location;
 import br.ufrj.cos.labia.aips.ips.Reading;
 import br.ufrj.cos.labia.aips.ips.WIFISignal;
+
 import com.tenkel.comm.BasicConnector;
 import com.tenkel.comm.CommunicationException;
 import com.tenkel.fragments.RegistrarDispositivoFragment.AndarWorker;
@@ -330,13 +334,13 @@ public class AutoScanFragment extends Fragment implements Listener {
         return view;
 	}
 	
-	@SuppressLint("NewApi")
+	
 	private void actual_posicaoDialog(){
 		actual_posicao = mPosicaoManager.getEmptyRemote();
 		
 		final EditText input = new EditText(getActivity());
 		
-		new AlertDialog.Builder(getActivity())
+		AlertDialog dialog = new AlertDialog.Builder(getActivity())
 			.setTitle("Nome do local")
 			.setMessage("Insira um nome para o local:")
 			.setView(input)
@@ -349,14 +353,15 @@ public class AutoScanFragment extends Fragment implements Listener {
 			      public void onClick(DialogInterface dialog, int whichButton) {
 			    	  actual_posicao.setNome("S/N");
 			      }
-			    }).setOnDismissListener(new DialogInterface.OnDismissListener() {
-					
-					@Override
-					public void onDismiss(DialogInterface dialog) { 
+			    })
+			    .create();
+		
+		dialog.setOnDismissListener( new OnDismissListener() {				
+					public void onDismiss(DialogInterface dialoug) { 
 
 						final EditText inputRef = new EditText(getActivity());
 						
-						new AlertDialog.Builder(getActivity())
+						AlertDialog dialog2 = new AlertDialog.Builder(getActivity())
 							.setTitle("Referência do local")
 							.setMessage("Insira uma referência para o local:")
 							.setView(inputRef)
@@ -369,10 +374,11 @@ public class AutoScanFragment extends Fragment implements Listener {
 							      public void onClick(DialogInterface dialog, int whichButton) {
 							    	  actual_posicao.setReferencia("Sem Referência.");
 							      }
-							    }).setOnDismissListener(new DialogInterface.OnDismissListener() {
-									
-									@Override
-									public void onDismiss(DialogInterface dialog) {
+							    })
+							    .create();
+							    
+						dialog2.setOnDismissListener( new OnDismissListener() {				
+							public void onDismiss(DialogInterface dialoug) { 
 
 										
 										actual_posicao.setX(actual_posicao.getIdRemoto().doubleValue()); 
@@ -401,12 +407,12 @@ public class AutoScanFragment extends Fragment implements Listener {
 										
 										
 									}
-								})
-						    .show();
+								});
+						    dialog2.show();
 						
 					}
-				})
-		    .show();
+				});
+		    dialog.show();
 		
 	}
 	
