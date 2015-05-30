@@ -84,6 +84,7 @@ public class Train extends Fragment {
 	private Button Export_BD;
 	private ProgressBar TrainProgress;
 	private SharedPrefManager mSharedPrefManager;
+	private Long last;
 	
 	public static Fragment newInstance() {
 		return new Train();
@@ -144,7 +145,7 @@ public class Train extends Fragment {
         Train = (Button) view.findViewById(R.id.buTrain);
         Export_BD = (Button) view.findViewById(R.id.export_bd);
         locationTable = (TableLayout) view.findViewById(R.id.locationTable);
-        
+        last=(long) -1;
         cycles = 0;
         	// Managers
      		mAndarManager = new AndarManager(getActivity());
@@ -247,7 +248,20 @@ public class Train extends Fragment {
 			{
 				guess.setText(String.valueOf(mPosicaoManager.getFirstById(l.getPointId()).getIdRemoto()));
 				confianca.setText(String.valueOf(mIPS.getConfidence()));
-				probabilidade.setText(String.format("%.1f",probability)+"%"); 
+				probabilidade.setText(String.format("%.1f",probability)+"%");
+				if (last!=mPosicaoManager.getFirstById(l.getPointId()).getIdRemoto())
+				{
+					AlertDialog dialog = new AlertDialog.Builder(getActivity())
+						.setMessage(mPosicaoManager.getFirstById(l.getPointId()).getPropaganda())
+						.setPositiveButton("OK"	, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int whichButton) {
+							}
+						})
+						.create();
+				dialog.show();
+				last = mPosicaoManager.getFirstById(l.getPointId()).getIdRemoto();
+				
+				}
 			}
 			else{
 				guess.setText("?");
