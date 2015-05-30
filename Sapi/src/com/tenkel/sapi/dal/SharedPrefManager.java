@@ -87,14 +87,14 @@ public class SharedPrefManager {
 		mEditPref.putString(DATE_TIME, tempoinicio);
 	} 
 	
-	public void setConfianca(float confianca) {
+	public void setConfianca(int confianca) {
 		if (mEditPref == null) throw new IllegalStateException(
 				"SharedPrefManager is open as read only");
-		mEditPref.putFloat(CONFIANCA, confianca);
+		mEditPref.putInt(CONFIANCA, confianca);
 	}
 	
-	public float getConfianca(){
-		return mPref.getFloat(CONFIANCA, 100);
+	public int getConfianca(){
+		return mPref.getInt(CONFIANCA, 100);
 	}
 	
 	
