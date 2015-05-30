@@ -247,7 +247,7 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 					mAndarManager.save(mAndar);
 					SoapObject PontosDeInteresse = (SoapObject) response2.getProperty(3);
 					for (int j=0; j<PontosDeInteresse.getPropertyCount();j++){
-						SoapObject PontoDeInteresse = (SoapObject) PontosDeInteresse.getProperty(i);
+						SoapObject PontoDeInteresse = (SoapObject) PontosDeInteresse.getProperty(j);
 						Posicao mPosicao;
 						mPosicao = new Posicao();
 						mPosicao.setIdAndar(mAndar.getId());
