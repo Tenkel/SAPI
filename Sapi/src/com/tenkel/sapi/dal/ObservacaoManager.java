@@ -3,8 +3,6 @@ package com.tenkel.sapi.dal;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.ufrj.cos.labia.aips.ips.Location;
-import br.ufrj.cos.labia.aips.ips.WIFISignal;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;

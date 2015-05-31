@@ -204,7 +204,8 @@ public class RegistrarDispositivoFragment extends Fragment implements OnClickLis
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		    builder.setTitle(R.string.escshop)
 		           .setItems(names, new DialogInterface.OnClickListener() {
-		               public void onClick(DialogInterface dialog, int which) {
+		               @Override
+					public void onClick(DialogInterface dialog, int which) {
 
 		       			LoadingDialog dialog2 = new LoadingDialog();
 		       			dialog2.setWorker(new AndarWorker(mSharedPrefManager.getToken(), mSharedPrefManager.getUserID(), Entities[which]));

@@ -9,12 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.tenkel.sapi.customviews.SimpleAndarView
-        android:id="@+id/andar"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
     <CheckBox
         android:id="@+id/cbAcompanhar"
         android:layout_width="match_parent"

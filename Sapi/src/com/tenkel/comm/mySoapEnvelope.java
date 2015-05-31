@@ -12,6 +12,7 @@ public class mySoapEnvelope extends SoapSerializationEnvelope {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
 	public void write(XmlSerializer writer) throws IOException {
 	    writer.setPrefix("xsi", xsi);
 	    writer.setPrefix("xsd", xsd);

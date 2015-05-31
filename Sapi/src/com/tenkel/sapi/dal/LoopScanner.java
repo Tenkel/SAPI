@@ -13,7 +13,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -165,6 +164,7 @@ public class LoopScanner extends BroadcastReceiver implements
 	}
 
 
+	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		if(accuracy< SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM)
 			host.calibrateSensor();
@@ -175,11 +175,12 @@ public class LoopScanner extends BroadcastReceiver implements
 	 * Save values when it changes.
 	 * 
 	 */
+	@Override
 	public void onSensorChanged(SensorEvent event) {
 		switch (event.sensor.getType()) {
 
 		case Sensor.TYPE_ROTATION_VECTOR:
-			orientationv = (float[]) event.values.clone();
+			orientationv = event.values.clone();
 			break;
 		case Sensor.TYPE_PRESSURE:
 			pressure_millibars = event.values[0];
@@ -197,7 +198,7 @@ public class LoopScanner extends BroadcastReceiver implements
 			proximity_cm = event.values[0];
 			break;
 		case Sensor.TYPE_GRAVITY:
-			gravity = (float[]) event.values.clone();
+			gravity = event.values.clone();
 			break;
 		case Sensor.TYPE_RELATIVE_HUMIDITY:
 			humidity = event.values[0];
@@ -213,6 +214,7 @@ public class LoopScanner extends BroadcastReceiver implements
 
 
 	
+	@Override
 	public void onLocationChanged(Location location) {
 	    lat = location.getLatitude();
 	    lon = location.getLongitude();
@@ -263,18 +265,21 @@ public class LoopScanner extends BroadcastReceiver implements
 	}
 
 
+	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		// TODO Auto-generated method stub
 		
 	}
 
 
+	@Override
 	public void onProviderEnabled(String provider) {
 		// TODO Auto-generated method stub
 		
 	}
 
 
+	@Override
 	public void onProviderDisabled(String provider) {
 		// TODO Auto-generated method stub
 		

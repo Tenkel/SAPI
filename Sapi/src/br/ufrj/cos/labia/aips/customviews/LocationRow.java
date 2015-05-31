@@ -19,9 +19,9 @@ public class LocationRow extends TableRow {
 
 	public LocationRow(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		LayoutParams rowParams = new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-	    LayoutParams innerParamsw1 = new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1);
-	    LayoutParams innerParamsw2 = new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 2);
+		LayoutParams rowParams = new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+	    LayoutParams innerParamsw1 = new TableRow.LayoutParams(0, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+	    LayoutParams innerParamsw2 = new TableRow.LayoutParams(0, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 2);
 	    
 	    String string_temporary;
 	    

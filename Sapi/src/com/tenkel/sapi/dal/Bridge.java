@@ -3,7 +3,6 @@ package com.tenkel.sapi.dal;
 import java.util.List;
 import java.util.Map;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;

@@ -94,6 +94,7 @@ public class KDE implements IPS {
 		 
 		// Sort list with comparator, to compare the Map values
 		Collections.sort(list, new Comparator<Map.Entry<Location, Float>>() {
+					@Override
 					public int compare(Map.Entry<Location, Float> o1,
 		                                           Map.Entry<Location, Float> o2) {
 						return (o1.getValue()).compareTo(o2.getValue());

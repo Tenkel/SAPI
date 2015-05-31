@@ -27,9 +27,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
@@ -38,7 +38,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import br.ufrj.cos.labia.aips.customviews.LocationRow;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog;
-import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog.Listener;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog.Worker;
 import br.ufrj.cos.labia.aips.ips.IPS;
 import br.ufrj.cos.labia.aips.ips.Location;
@@ -53,7 +52,6 @@ import com.tenkel.sapi.dal.AndarManager;
 import com.tenkel.sapi.dal.Bridge;
 import com.tenkel.sapi.dal.LeituraWiFi;
 import com.tenkel.sapi.dal.LeituraWifiManager;
-import com.tenkel.sapi.dal.Observacao;
 import com.tenkel.sapi.dal.ObservacaoManager;
 import com.tenkel.sapi.dal.Posicao;
 import com.tenkel.sapi.dal.PosicaoManager;
@@ -110,13 +108,15 @@ public class Train extends Fragment {
 			.setMessage("Escolha o nível necessário de confiança:")
 			.setView(input)
 			.setPositiveButton("OK"	, new DialogInterface.OnClickListener() {
-			    public void onClick(DialogInterface dialog, int whichButton) {
+			    @Override
+				public void onClick(DialogInterface dialog, int whichButton) {
 			    	mSharedPrefManager.setConfianca(input.getValue());
 			    	mSharedPrefManager.save();
 			      }
 			    })
 		    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			      public void onClick(DialogInterface dialog, int whichButton) {
+			      @Override
+				public void onClick(DialogInterface dialog, int whichButton) {
 			      }
 			    })
 			    .create();
@@ -163,6 +163,7 @@ public class Train extends Fragment {
         Predict = (ToggleButton) view.findViewById(R.id.predict);
         Predict.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
+			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
 				if (isChecked) {
@@ -201,6 +202,7 @@ public class Train extends Fragment {
 
         Export_BD.setOnClickListener(new View.OnClickListener() {
 			
+			@Override
 			public void onClick(View view) {
 				String state = Environment.getExternalStorageState();
 				if (Environment.MEDIA_MOUNTED.equals(state)) {
@@ -247,7 +249,7 @@ public class Train extends Fragment {
 			float probability = getProbability(map);
 			if (mIPS.getConfidence() >= -mSharedPrefManager.getConfianca())
 			{
-				guess.setText(String.valueOf(mPosicaoManager.getFirstById(l.getPointId()).getIdRemoto()));
+				guess.setText(String.valueOf(mPosicaoManager.getFirstById(l.getPointId()).getNome()));
 				confianca.setText(String.valueOf(mIPS.getConfidence()));
 				probabilidade.setText(String.format("%.1f",probability)+"%");
 				if(mPosicaoManager.getFirstById(l.getPointId()).isAtivo())
@@ -256,6 +258,7 @@ public class Train extends Fragment {
 					AlertDialog dialog = new AlertDialog.Builder(getActivity())
 						.setMessage(mPosicaoManager.getFirstById(l.getPointId()).getPropaganda())
 						.setPositiveButton("OK"	, new DialogInterface.OnClickListener() {
+							@Override
 							public void onClick(DialogInterface dialog, int whichButton) {
 							}
 						})
@@ -281,7 +284,7 @@ public class Train extends Fragment {
 			FoundLocation foundlocation = new FoundLocation(posicao.getIdRemoto(), andar.getNome(), map.get(location), probabilites.get(location),posicao.getNome());
 			LocationRow row = new LocationRow(getActivity(),null);
 			row.setFounLocation(foundlocation);
-			locationTable.addView(row,new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
+			locationTable.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 			locationTable.invalidate();
 		}
 		
@@ -296,7 +299,7 @@ public class Train extends Fragment {
 		Iterator<Location> locations = map.keySet().iterator();
 		while (locations.hasNext()){
 			Location location = locations.next();
-			soma+= (Double) (Math.exp(mIPS.getConfidence(location)));
+			soma+= (Math.exp(mIPS.getConfidence(location)));
 		}
 		
 
@@ -315,7 +318,7 @@ public class Train extends Fragment {
 		Iterator<Location> locations = map.keySet().iterator();
 		while (locations.hasNext()){
 			Location location = locations.next();
-			soma+= (Double) (Math.exp(mIPS.getConfidence(location)));
+			soma+= (Math.exp(mIPS.getConfidence(location)));
 		}
 		Iterator<Location> locationes = map.keySet().iterator();
 		return (float) (Math.exp(mIPS.getConfidence(locationes.next()))*100.0/soma);

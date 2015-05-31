@@ -27,59 +27,75 @@
         <TextView
             android:id="@+id/chute"
             android:layout_width="80dp"
-            android:layout_height="90dp"
+            android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
             android:layout_below="@id/textView2"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:text="\?"
             android:textColor="@color/Red"
-            android:textSize="60sp" />
+            android:textSize="25sp" />
 
         <LinearLayout
-            android:id="@+id/LinearLayout3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/chute"
-            android:layout_toRightOf="@+id/chute"
-            android:orientation="vertical" >
+            android:layout_below="@id/chute"
+            android:layout_centerHorizontal="true" >
 
-            <TextView
-                android:id="@+id/textView1"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Aquisições" />
+
+                <TextView
+                    android:id="@+id/aqc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/niceBlue" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LinearLayout3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Aquisições" />
+                android:layout_marginLeft="5dp"
+                android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/aqc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/niceBlue" />
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Confiança" />
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Confiança" />
+                <TextView
+                    android:id="@+id/confianca"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/green" />
 
-            <TextView
-                android:id="@+id/confianca"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/green" />
+            </LinearLayout>
         </LinearLayout>
 
         <TextView
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/LinearLayout3"
             android:layout_toLeftOf="@id/chute"
-            android:text="Probabilidade" />
+            android:text="Probabilidade"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/probabilidade"
@@ -93,8 +109,8 @@
             android:text="0\%"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/black"
-            android:textSize="23sp" />
-
+            android:textSize="23sp"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <ToggleButton

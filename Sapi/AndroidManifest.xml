@@ -34,13 +34,7 @@
             </intent-filter>
         </activity>
         
-        <activity android:name="com.tenkel.sapi.DebugRoomActivity"
-        	android:screenOrientation="portrait" />
         <activity android:name="com.tenkel.sapi.TrainModelActivity"
-        	android:screenOrientation="portrait" />
-        <activity android:name="com.tenkel.sapi.ExecuteModelActivity"
-        	android:screenOrientation="portrait" />
-        <activity android:name="com.tenkel.sapi.LocalActivity"
         	android:screenOrientation="portrait" />
         
         <service android:name="com.tenkel.sapi.dal.Bridge" />

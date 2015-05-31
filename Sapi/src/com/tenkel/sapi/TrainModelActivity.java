@@ -35,6 +35,7 @@ import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog.Worker;
 import br.ufrj.cos.labia.aips.ips.Location;
 import br.ufrj.cos.labia.aips.ips.Reading;
 import br.ufrj.cos.labia.aips.ips.WIFISignal;
+
 import com.tenkel.sapi.R;
 import com.tenkel.sapi.dal.AccessPoint;
 import com.tenkel.sapi.dal.AccessPointManager;
@@ -92,7 +93,7 @@ public class TrainModelActivity extends Activity implements OnPointSelectListene
 		mAndarManager = new AndarManager(getApplicationContext());
 		
 		// View com o andar
-		mAndar = (SimpleAndarView) findViewById(R.id.andar);
+		mAndar = (SimpleAndarView) findViewById(0);
 		mAndar.setOnPointSelectListener(this);
 		mAndar.setSelectable(true);
 		

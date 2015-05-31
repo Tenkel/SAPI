@@ -3,11 +3,8 @@ package com.tenkel.fragments;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.TreeMap;
-
 import org.ksoap2.serialization.SoapObject;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -34,7 +31,6 @@ import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog;
 import br.ufrj.cos.labia.aips.fragments.dialogs.LoadingDialog.Listener;
@@ -46,9 +42,6 @@ import br.ufrj.cos.labia.aips.ips.WIFISignal;
 
 import com.tenkel.comm.BasicConnector;
 import com.tenkel.comm.CommunicationException;
-import com.tenkel.fragments.RegistrarDispositivoFragment.AndarWorker;
-import com.tenkel.fragments.RegistrarDispositivoFragment.RegistrarWorker;
-import com.tenkel.sapi.NavigationDrawerFragment;
 import com.tenkel.sapi.R;
 import com.tenkel.sapi.dal.AccessPoint;
 import com.tenkel.sapi.dal.AccessPointManager;
@@ -57,7 +50,6 @@ import com.tenkel.sapi.dal.AndarManager;
 import com.tenkel.sapi.dal.Bridge;
 import com.tenkel.sapi.dal.FuncaoPosicao;
 import com.tenkel.sapi.dal.FuncaoPosicaoManager;
-import com.tenkel.sapi.dal.LeituraWiFi;
 import com.tenkel.sapi.dal.LeituraWifiManager;
 import com.tenkel.sapi.dal.Observacao;
 import com.tenkel.sapi.dal.ObservacaoManager;
@@ -222,6 +214,7 @@ public class AutoScanFragment extends Fragment implements Listener {
 
 		andar.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
 			
+			@Override
 			public void onValueChange(NumberPicker picker, int oldVal, int newVal) {			
 				actual_andar = mAndares.get(newVal-1);
 				mPosicoes = mPosicaoManager.getByidAndar(actual_andar.getId());
@@ -242,6 +235,7 @@ public class AutoScanFragment extends Fragment implements Listener {
 		
 		Room.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
 			
+			@Override
 			public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
 				actual_posicao = mPosicoes.get(newVal-1);
 				FillActualData();
@@ -251,6 +245,7 @@ public class AutoScanFragment extends Fragment implements Listener {
 		
 		Collect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
+			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
 				if (isChecked) {
@@ -345,18 +340,21 @@ public class AutoScanFragment extends Fragment implements Listener {
 			.setMessage("Insira um nome para o local:")
 			.setView(input)
 			.setPositiveButton("OK"	, new DialogInterface.OnClickListener() {
-			    public void onClick(DialogInterface dialog, int whichButton) {
+			    @Override
+				public void onClick(DialogInterface dialog, int whichButton) {
 			        actual_posicao.setNome(input.getText().toString());
 			      }
 			    })
 		    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			      public void onClick(DialogInterface dialog, int whichButton) {
+			      @Override
+				public void onClick(DialogInterface dialog, int whichButton) {
 			    	  actual_posicao.setNome("S/N");
 			      }
 			    })
 			    .create();
 		
 		dialog.setOnDismissListener( new OnDismissListener() {				
+					@Override
 					public void onDismiss(DialogInterface dialoug) { 
 
 						final EditText inputRef = new EditText(getActivity());
@@ -366,18 +364,21 @@ public class AutoScanFragment extends Fragment implements Listener {
 							.setMessage("Insira uma referência para o local:")
 							.setView(inputRef)
 							.setPositiveButton("OK"	, new DialogInterface.OnClickListener() {
-							    public void onClick(DialogInterface dialog, int whichButton) {
+							    @Override
+								public void onClick(DialogInterface dialog, int whichButton) {
 							    	actual_posicao.setReferencia(inputRef.getText().toString());
 							      }
 							    })
 						    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-							      public void onClick(DialogInterface dialog, int whichButton) {
+							      @Override
+								public void onClick(DialogInterface dialog, int whichButton) {
 							    	  actual_posicao.setReferencia("Sem Referência.");
 							      }
 							    })
 							    .create();
 							    
 						dialog2.setOnDismissListener( new OnDismissListener() {				
+							@Override
 							public void onDismiss(DialogInterface dialoug) { 
 
 										
@@ -485,7 +486,7 @@ public class AutoScanFragment extends Fragment implements Listener {
 			signals.add(new WIFISignal(r.BSSID, r.level));
 		
 		Reading reading = new Reading(signals);
-		LinkedHashMap<Location, Float> map = (LinkedHashMap<Location, Float>) mIPS.predict(reading);
+		LinkedHashMap<Location, Float> map = mIPS.predict(reading);
 		Location l = map.keySet().iterator().next();
 		if (l == null || l.getPointId() == null)  {
 			Log.w("DebugRoomActivity", "IPS returned null as prediction");
