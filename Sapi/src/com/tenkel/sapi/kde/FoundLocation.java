@@ -4,6 +4,7 @@ public class FoundLocation {
 
 	private Long mPointId;
 	private String mAndarName;
+	private String mPosicaoName;
 	private Float mConfianca;
 	private Float mProbabilidade;
 	
@@ -13,12 +14,13 @@ public class FoundLocation {
 		super();
 	}
 
-	public FoundLocation(Long pointId, String andarName, Float Confianca, Float Probabilidade) {
+	public FoundLocation(Long pointId, String andarName, Float Confianca, Float Probabilidade, String PosicaoName) {
 		super();
 		this.setPointId(pointId);
 		this.setAndarName(andarName);
 		this.setConfianca(Confianca);
 		this.setProbabilidade(Probabilidade);
+		this.setPosicaoName(PosicaoName);
 	}
 
 	public Long getPointId() {
@@ -51,6 +53,14 @@ public class FoundLocation {
 
 	public void setProbabilidade(Float mProbabilidade) {
 		this.mProbabilidade = mProbabilidade;
+	}
+
+	public String getPosicaoName() {
+		return mPosicaoName;
+	}
+
+	public void setPosicaoName(String mPosicaoName) {
+		this.mPosicaoName = mPosicaoName;
 	}
 
 

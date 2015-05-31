@@ -250,6 +250,7 @@ public class Train extends Fragment {
 				guess.setText(String.valueOf(mPosicaoManager.getFirstById(l.getPointId()).getIdRemoto()));
 				confianca.setText(String.valueOf(mIPS.getConfidence()));
 				probabilidade.setText(String.format("%.1f",probability)+"%");
+				if(mPosicaoManager.getFirstById(l.getPointId()).isAtivo())
 				if (last!=mPosicaoManager.getFirstById(l.getPointId()).getIdRemoto())
 				{
 					AlertDialog dialog = new AlertDialog.Builder(getActivity())
@@ -277,7 +278,7 @@ public class Train extends Fragment {
 			Location location = locations.next();
 			Posicao posicao = mPosicaoManager.getFirstById(location.getPointId());
 			Andar andar = mAndarManager.getFirstById(posicao.getIdAndar());
-			FoundLocation foundlocation = new FoundLocation(posicao.getIdRemoto(), andar.getNome(), map.get(location), probabilites.get(location));
+			FoundLocation foundlocation = new FoundLocation(posicao.getIdRemoto(), andar.getNome(), map.get(location), probabilites.get(location),posicao.getNome());
 			LocationRow row = new LocationRow(getActivity(),null);
 			row.setFounLocation(foundlocation);
 			locationTable.addView(row,new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));

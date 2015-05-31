@@ -89,7 +89,8 @@ public class LocationRow extends TableRow {
 	
 	public void setFounLocation(FoundLocation location){
     	andar.setText(location.getAndarName());
-    	this.posicao.setText(String.valueOf(location.getPointId()));
+    	//this.posicao.setText(String.valueOf(location.getPointId()));
+    	this.posicao.setText(location.getPosicaoName());
 		this.probabilidade.setText(String.format("%.1f",location.getProbabilidade())+"%");
 	    this.confianca.setText(String.format("%.2f",location.getConfianca()));
     	this.invalidate();	
